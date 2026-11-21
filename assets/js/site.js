@@ -19,57 +19,56 @@
   });
   pintarTema();
 
-  /* ---- Fondo reactivo: halo y rejilla dorada que siguen al cursor ----
-     Se mueven con transform (GPU), así que no se repinta toda la pantalla en cada movimiento. */
-  var fx = document.querySelector('.bg-fx');
-  var glow = fx && fx.querySelector('.fx-glow'), grid = fx && fx.querySelector('.fx-grid');
+  /* ---- Fondo reactivo: halo dorado que sigue al cursor ----
+     Solo cambia "transform" de una capa pequeña: el navegador lo resuelve en la GPU sin repintar. */
+  var fx = document.querySelector('.bg-fx'), glow = fx && fx.querySelector('.fx-glow');
   var fino = window.matchMedia('(any-pointer:fine)').matches;
   var calma = window.matchMedia('(prefers-reduced-motion:reduce)').matches;
   var suave = calma ? 1 : 0.16;
   var tx = innerWidth / 2, ty = innerHeight * 0.3, cx = tx, cy = ty, corriendo = false;
-  function pintar() {
-    var t = 'translate3d(' + cx.toFixed(1) + 'px,' + cy.toFixed(1) + 'px,0)';
-    glow.style.transform = t; grid.style.transform = t;
-    // la rejilla de acento se recoloca para quedar alineada con la rejilla base
-    grid.style.backgroundPosition = ((340 - cx) % 64).toFixed(1) + 'px ' + ((340 - cy) % 64).toFixed(1) + 'px';
-  }
+  function pintar() { glow.style.transform = 'translate3d(' + (cx | 0) + 'px,' + (cy | 0) + 'px,0)'; }
   function paso() {
     cx += (tx - cx) * suave; cy += (ty - cy) * suave; pintar();
-    if (Math.abs(tx - cx) + Math.abs(ty - cy) > 0.4) requestAnimationFrame(paso); else corriendo = false;
+    if (Math.abs(tx - cx) + Math.abs(ty - cy) > 0.5) requestAnimationFrame(paso); else corriendo = false;
   }
   function mover(x, y) { tx = x; ty = y; if (!corriendo) { corriendo = true; requestAnimationFrame(paso); } }
-  if (fx && fino) {
+  if (glow && fino) {
     document.addEventListener('pointermove', function (e) { if (e.pointerType !== 'touch') mover(e.clientX, e.clientY); }, { passive: true });
     fx.classList.add('on'); pintar();
   }
-  /* Onda al hacer clic o tocar (también en móvil, donde además lleva el halo al punto tocado) */
+  /* Onda al hacer clic o tocar (en móvil, además, lleva el halo al punto tocado) */
   document.addEventListener('pointerdown', function (e) {
     var p = document.createElement('span');
     p.className = 'pulso'; p.style.left = e.clientX + 'px'; p.style.top = e.clientY + 'px';
+    p.addEventListener('animationend', function () { p.remove(); });
     document.body.appendChild(p);
-    setTimeout(function () { p.remove(); }, 950);
-    if (fx && e.pointerType === 'touch') { fx.classList.add('on'); cx = tx = e.clientX; cy = ty = e.clientY; pintar(); }
+    if (glow && e.pointerType === 'touch') { fx.classList.add('on'); cx = tx = e.clientX; cy = ty = e.clientY; pintar(); }
   }, { passive: true });
 
-  /* ---- Botón flotante: abajo cuando estás arriba, arriba cuando has bajado ---- */
-  var sb = document.getElementById('scroll-btn');
+  /* ---- Botón flotante: abajo cuando estás arriba, arriba cuando has bajado ----
+     El scroll se procesa una vez por fotograma y solo toca el DOM cuando cambia el estado. */
+  var sb = document.getElementById('scroll-btn'), alto = 0, estado = '', pendiente = false;
+  function medir() { alto = document.documentElement.scrollHeight; }
   function actualizarScroll() {
-    var largo = document.documentElement.scrollHeight > window.innerHeight * 1.3;
-    sb.hidden = !largo;
-    var abajo = window.scrollY < 200;
-    sb.classList.toggle('up', !abajo);
-    sb.setAttribute('aria-label', abajo ? 'Ir abajo' : 'Volver arriba');
-    sb.firstElementChild.textContent = abajo ? '↓' : '↑';
+    pendiente = false;
+    var largo = alto > innerHeight * 1.3, abajo = scrollY < 200;
+    var nuevo = !largo ? 'oculto' : abajo ? 'abajo' : 'arriba';
+    if (nuevo === estado) return;
+    estado = nuevo;
+    sb.hidden = nuevo === 'oculto';
+    sb.classList.toggle('up', nuevo === 'arriba');
+    sb.setAttribute('aria-label', nuevo === 'arriba' ? 'Volver arriba' : 'Ir abajo');
+    sb.firstElementChild.textContent = nuevo === 'arriba' ? '↑' : '↓';
   }
   if (sb) {
     sb.addEventListener('click', function () {
-      var abajo = !sb.classList.contains('up');
-      window.scrollTo({ top: abajo ? document.documentElement.scrollHeight : 0, behavior: 'smooth' });
+      window.scrollTo({ top: estado === 'arriba' ? 0 : alto, behavior: calma ? 'auto' : 'smooth' });
     });
-    window.addEventListener('scroll', actualizarScroll, { passive: true });
-    window.addEventListener('resize', actualizarScroll);
-    actualizarScroll();
-    window.actualizarScroll = actualizarScroll;
+    addEventListener('scroll', function () { if (!pendiente) { pendiente = true; requestAnimationFrame(actualizarScroll); } }, { passive: true });
+    addEventListener('resize', function () { medir(); actualizarScroll(); }, { passive: true });
+    addEventListener('load', function () { medir(); actualizarScroll(); });
+    medir(); actualizarScroll();
+    window.actualizarScroll = function () { medir(); estado = ''; actualizarScroll(); };
   }
 
   /* ---- Enlaces internos (#seccion): desplazamiento suave ---- */
