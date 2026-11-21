@@ -5,19 +5,19 @@
   --bg:#0a0b0d; --panel:#0d0e11; --panel-2:#121418; --line:#24272e; --faint:#3a3e47;
   --text:#ecedef; --body:#cdd0d5; --muted:#9a9fa8; --dim:#737985;
   --gold:#c9a44c; --gold-soft:rgba(201,164,76,.12); --glow:rgba(201,164,76,.35);
-  --logo-filter:none;
+  --logo-filter:none; --flow-a:#c9a44c; --flow-b:#3d5fa8;
 }
 [data-theme="claro"]{
   --bg:#f4f3ef; --panel:#ffffff; --panel-2:#eceae4; --line:#d8d5cc; --faint:#bdb9ae;
   --text:#101114; --body:#26292e; --muted:#454a53; --dim:#656a74;
   --gold:#8a6414; --gold-soft:rgba(138,100,20,.12); --glow:rgba(138,100,20,.30);
-  --logo-filter:brightness(.28) contrast(1.2);
+  --logo-filter:brightness(.28) contrast(1.2); --flow-a:#a07a22; --flow-b:#3d5fa8;
 }
 [data-theme="neon"]{ /* verde neón oscuro */
   --bg:#06110c; --panel:#08150f; --panel-2:#0c1c14; --line:#163326; --faint:#225039;
   --text:#e4f6ec; --body:#c2dccf; --muted:#8fb3a1; --dim:#678c7a;
   --gold:#3ee38f; --gold-soft:rgba(62,227,143,.12); --glow:rgba(62,227,143,.35);
-  --logo-filter:none;
+  --logo-filter:none; --flow-a:#3ee38f; --flow-b:#1f7f9a;
 }
 :root{
   --sans: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
@@ -36,6 +36,7 @@ body{background:var(--bg);color:var(--text);font:16px/1.65 var(--sans);transitio
    .bg-fx         → trama de puntos cada 32 px con marcas en cruz cada 128 px (máscara SVG estática, se pinta una vez)
    .bg-fx::before → líneas de barrido tipo monitor CRT (estáticas)
    .bg-fx::after  → viñeta
+   .fx-flow       → flujo de dos tonos en cascada, muy tenue (15 % en el centro → 0 en los bordes), ~10 fps
    .fx-pix        → canvas diminuto ampliado con píxeles nítidos: halo tramado, estela, ondas y chispas (site.js) */
 .bg-fx{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden;contain:strict;transform:translateZ(0);background:var(--bg)}
 .bg-fx .trama{position:absolute;inset:0;background:var(--faint);opacity:.55;
@@ -43,7 +44,8 @@ body{background:var(--bg);color:var(--text);font:16px/1.65 var(--sans);transitio
 .bg-fx::before{content:"";position:absolute;inset:0;z-index:2;opacity:.5;
   background:repeating-linear-gradient(0deg,transparent 0 2px,color-mix(in srgb,var(--bg) 55%,transparent) 2px 3px)}
 .bg-fx::after{content:"";position:absolute;inset:0;z-index:3;background:radial-gradient(ellipse at 50% 0%,transparent 0%,color-mix(in srgb,var(--bg) 50%,transparent) 50%,var(--bg) 92%)}
-.fx-pix{position:absolute;left:0;top:0;z-index:1;image-rendering:pixelated;image-rendering:crisp-edges}
+.fx-pix,.fx-flow{position:absolute;left:0;top:0;z-index:1;image-rendering:pixelated;image-rendering:crisp-edges}
+.fx-flow{z-index:4}
 /* Velo que acompaña al desplazamiento entre secciones */
 .velo{position:fixed;inset:0;z-index:9;pointer-events:none;opacity:0;transition:opacity .35s var(--ease);
   background:linear-gradient(180deg,transparent 0%,color-mix(in srgb,var(--bg) 70%,transparent) 35%,color-mix(in srgb,var(--bg) 70%,transparent) 65%,transparent 100%)}

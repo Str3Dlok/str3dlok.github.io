@@ -12,7 +12,7 @@
     var t = temas[(temas.indexOf(root.dataset.theme) + 1) % temas.length];
     root.dataset.theme = t;
     try { localStorage.setItem('tema', t); } catch (e) {}
-    pintarTema(); leerColores();
+    pintarTema(); leerColores(); if (typeof coloresFlujo === 'function') coloresFlujo();
   });
   pintarTema();
 
@@ -116,6 +116,48 @@
       chispas.push({ x: Math.random() * cols | 0, y: Math.random() * filas | 0, t0: ahora + Math.random() * 800, dur: 2200 + Math.random() * 1600 });
       pedir();
     }, 1800);
+  }
+
+
+  /* ================= Flujo de fondo en cascada =================
+     Un campo ondulante de dos tonos que baja muy despacio. Cada celda se enciende o se apaga de forma gradual
+     (unos 3 s) según cruza el umbral de un tramado Bayer, lo que crea la "cascada" de píxeles.
+     Opacidad máxima 15 % en el eje central, 0 en los bordes. Se calcula a ~10 fps en un ImageData (muy barato). */
+  var fl = document.querySelector('.fx-flow'), fctx = fl && fl.getContext('2d'), img = null, colA = [201, 164, 76], colB = [61, 95, 168];
+  function hex(c) { c = c.trim().replace('#', ''); if (c.length === 3) c = c.replace(/./g, '$&$&'); var n = parseInt(c, 16); return [n >> 16 & 255, n >> 8 & 255, n & 255]; }
+  function coloresFlujo() {
+    if (!fl) return; var s = getComputedStyle(root);
+    try { colA = hex(s.getPropertyValue('--flow-a')); colB = hex(s.getPropertyValue('--flow-b')); } catch (e) {}
+  }
+  function medirFlujo() {
+    if (!fl) return;
+    fl.width = cols; fl.height = filas; fl.style.width = cols * CEL + 'px'; fl.style.height = filas * CEL + 'px';
+    img = fctx.createImageData(cols, filas);
+  }
+  function flujo() {
+    if (!fl || document.hidden || !img) return;
+    var t = performance.now() / 1000, d = img.data, W = cols, H = filas, i = 0;
+    for (var y = 0; y < H; y++) {
+      var yy = y * .045 - t * .06, vy = 1 - Math.abs(y / H - .45) * 1.1; if (vy < 0) vy = 0;
+      for (var x = 0; x < W; x++, i += 4) {
+        var nx = x / W - .5, m = 1 - Math.abs(nx) * 2.2;          // máscara: centro → bordes
+        if (m <= 0) { d[i + 3] = 0; continue; }
+        var xx = x * .035;
+        // campo tipo remolino: senos anidados que se desplazan hacia abajo
+        var v = Math.sin(xx + Math.sin(yy * 1.3 + t * .05) * 2.2) * Math.cos(yy - Math.sin(xx * 1.7 - t * .04) * 1.6);
+        var k = (v + 1) * 8 - BAYER[(y & 3) * 4 + (x & 3)];          // umbral tramado
+        var a = k < 0 ? 0 : k > 4 ? 1 : k / 4;                       // transición suave de la celda
+        var mez = (Math.sin(xx * .8 - yy * .9 + t * .03) + 1) * .5;  // mezcla entre los dos tonos
+        d[i] = colA[0] + (colB[0] - colA[0]) * mez; d[i + 1] = colA[1] + (colB[1] - colA[1]) * mez; d[i + 2] = colA[2] + (colB[2] - colA[2]) * mez;
+        d[i + 3] = a * m * m * vy * 38;                              // 38/255 ≈ 15 %
+      }
+    }
+    fctx.putImageData(img, 0, 0);
+  }
+  if (fl) {
+    coloresFlujo(); medirFlujo(); flujo();
+    setInterval(flujo, 100);
+    addEventListener('resize', function () { medirFlujo(); flujo(); }, { passive: true });
   }
 
   /* ================= Desplazamiento animado entre secciones =================
