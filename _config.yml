@@ -1,25 +1,58 @@
 # Configuración del sitio · Str3Dlok / Tesis
-title: "Str3Dlok · Tesis doctoral"
-description: "Gemelos digitales de patrimonio cultural: bitácora de investigación doctoral de Alejandro Baeza (Str3Dlok)."
-author: "Alejandro Baeza"
+title: "Str3Dlok"
+tagline: "Tesis doctoral sobre gemelos digitales de patrimonio cultural"
+description: "Bitácora de la tesis doctoral de Alejandro Baeza (Str3Dlok) sobre digitalización 3D de patrimonio cultural y gemelos digitales."
+author:
+  name: "Alejandro Baeza"
+  url: "https://str3dlok.github.io/contacto/"
 lang: es
+locale: es_ES
 url: "https://str3dlok.github.io"
 baseurl: ""
 timezone: Europe/Madrid
 
+# SEO: imagen por defecto para redes, logo y perfil (datos estructurados JSON-LD de jekyll-seo-tag)
+logo: /assets/img/apple-touch-icon.png
+image:
+  path: /assets/img/og-image.png
+  width: 1200
+  height: 630
+  alt: "Gemelos digitales de patrimonio cultural · Str3Dlok"
+twitter:
+  username: str3dlok
+  card: summary_large_image
+social:
+  type: Person
+  name: "Alejandro Baeza"
+  links:
+    - https://www.youtube.com/@str3dlok
+    - https://www.artstation.com/str3dlok
+    - https://www.linkedin.com/in/alejandrobaezafernandez/
+    - https://str3dlok.itch.io
+    - https://www.instagram.com/str3dlok
+    - https://x.com/str3dlok
+# Verificación en buscadores (rellenar cuando se den de alta):
+# webmaster_verifications:
+#   google: CODIGO_SEARCH_CONSOLE
+#   bing: CODIGO_BING
+
 # Enlaces de las entradas: /bitacora/AAAA/MM/DD/titulo/
 permalink: /bitacora/:year/:month/:day/:title/
 
-# Valores por defecto de cada entrada (ver _plantillas/entrada.md)
 defaults:
   - scope: { path: "", type: posts }
     values:
       layout: post
       author: "Alejandro Baeza"
 
+feed:
+  path: feed.xml
+
 markdown: kramdown
 plugins:
   - jekyll-seo-tag
+  - jekyll-sitemap
+  - jekyll-feed
 
 exclude:
   - README.md

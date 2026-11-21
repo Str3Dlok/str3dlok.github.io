@@ -1,6 +1,7 @@
 ---
 layout: default
-title: Contacto
+description: "Alejandro Baeza (Str3Dlok), artista técnico 3D, desarrollador de videojuegos y docente. Redes, trayectoria y contacto."
+title: "Contacto · Alejandro Baeza"
 nav: contacto
 permalink: /contacto/
 ---
@@ -31,3 +32,22 @@ permalink: /contacto/
     </div>
   </div>
 </section>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "ProfilePage",
+  "url": "{{ page.url | absolute_url }}",
+  "mainEntity": {
+    "@type": "Person",
+    "name": "Alejandro Baeza",
+    "alternateName": "Str3Dlok",
+    "jobTitle": "Investigador predoctoral · Artista técnico 3D",
+    "description": "{{ page.description }}",
+    "email": "mailto:str3dlok@gmail.com",
+    "image": "{{ '/assets/img/logo-str3dlok.webp' | absolute_url }}",
+    "knowsAbout": ["Patrimonio cultural", "Gemelos digitales", "Fotogrametría", "Modelado 3D", "Desarrollo de videojuegos", "Blender", "Unreal Engine"],
+    "sameAs": {{ site.social.links | jsonify }}
+  }
+}
+</script>

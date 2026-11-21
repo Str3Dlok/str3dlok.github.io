@@ -19,35 +19,36 @@
   });
   pintarTema();
 
-  /* ---- Rejilla de fondo que se ilumina bajo el cursor ---- */
-  // Con ratón (aunque el equipo tenga "reducir animaciones") el fondo sigue al cursor.
-  // Si se pide menos movimiento, el halo va directo al cursor sin suavizado.
+  /* ---- Fondo reactivo: halo y rejilla dorada que siguen al cursor ----
+     Se mueven con transform (GPU), así que no se repinta toda la pantalla en cada movimiento. */
+  var fx = document.querySelector('.bg-fx');
+  var glow = fx && fx.querySelector('.fx-glow'), grid = fx && fx.querySelector('.fx-grid');
   var fino = window.matchMedia('(any-pointer:fine)').matches;
   var calma = window.matchMedia('(prefers-reduced-motion:reduce)').matches;
-  var suave = calma ? 1 : 0.14;
-  if (fino) {
-    // El halo sigue al cursor con un pequeño retardo (interpolación) para que se sienta fluido
-    var tx = innerWidth / 2, ty = innerHeight * 0.3, cx = tx, cy = ty, corriendo = false;
-    function paso() {
-      cx += (tx - cx) * suave; cy += (ty - cy) * suave;
-      root.style.setProperty('--mx', cx.toFixed(1) + 'px');
-      root.style.setProperty('--my', cy.toFixed(1) + 'px');
-      if (Math.abs(tx - cx) + Math.abs(ty - cy) > 0.5) requestAnimationFrame(paso); else corriendo = false;
-    }
-    document.addEventListener('pointermove', function (e) {
-      tx = e.clientX; ty = e.clientY;
-      if (!corriendo) { corriendo = true; requestAnimationFrame(paso); }
-    }, { passive: true });
-    document.body.classList.add('spot');
-    paso();
+  var suave = calma ? 1 : 0.16;
+  var tx = innerWidth / 2, ty = innerHeight * 0.3, cx = tx, cy = ty, corriendo = false;
+  function pintar() {
+    var t = 'translate3d(' + cx.toFixed(1) + 'px,' + cy.toFixed(1) + 'px,0)';
+    glow.style.transform = t; grid.style.transform = t;
+    // la rejilla de acento se recoloca para quedar alineada con la rejilla base
+    grid.style.backgroundPosition = ((340 - cx) % 64).toFixed(1) + 'px ' + ((340 - cy) % 64).toFixed(1) + 'px';
   }
-  /* Onda en el fondo al hacer clic o tocar (también en móvil) */
+  function paso() {
+    cx += (tx - cx) * suave; cy += (ty - cy) * suave; pintar();
+    if (Math.abs(tx - cx) + Math.abs(ty - cy) > 0.4) requestAnimationFrame(paso); else corriendo = false;
+  }
+  function mover(x, y) { tx = x; ty = y; if (!corriendo) { corriendo = true; requestAnimationFrame(paso); } }
+  if (fx && fino) {
+    document.addEventListener('pointermove', function (e) { if (e.pointerType !== 'touch') mover(e.clientX, e.clientY); }, { passive: true });
+    fx.classList.add('on'); pintar();
+  }
+  /* Onda al hacer clic o tocar (también en móvil, donde además lleva el halo al punto tocado) */
   document.addEventListener('pointerdown', function (e) {
     var p = document.createElement('span');
     p.className = 'pulso'; p.style.left = e.clientX + 'px'; p.style.top = e.clientY + 'px';
     document.body.appendChild(p);
     setTimeout(function () { p.remove(); }, 950);
-    if (!fino) { root.style.setProperty('--mx', e.clientX + 'px'); root.style.setProperty('--my', e.clientY + 'px'); }
+    if (fx && e.pointerType === 'touch') { fx.classList.add('on'); cx = tx = e.clientX; cy = ty = e.clientY; pintar(); }
   }, { passive: true });
 
   /* ---- Botón flotante: abajo cuando estás arriba, arriba cuando has bajado ---- */

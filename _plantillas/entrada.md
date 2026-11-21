@@ -3,7 +3,8 @@
 title: "Título claro de la entrada"
 date: 2026-01-01 10:00:00 +0100
 author: "Alejandro Baeza"                    # por defecto ya es él
-image: /assets/img/posts/AAAA-MM-DD-nombre.webp   # miniatura y cabecera (WebP, 1600x900, <300 KB)
+image: /assets/img/posts/AAAA-MM-DD-nombre.webp   # miniatura, cabecera y vista previa en redes (WebP, 1600x900, <300 KB)
+image_alt: "Descripción breve de la imagen (accesibilidad y SEO)"
 description: "Descripción corta (1-2 frases, máx. ~160 caracteres). Es la que se ve en la bitácora."
 resumen: "Descripción amplia (3-4 frases). Se muestra bajo el título dentro de la entrada."
 tags: [diario, metodologia]               # hashtags cortos, minúsculas, sin tildes ni espacios (usar guion)

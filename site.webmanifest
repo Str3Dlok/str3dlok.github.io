@@ -1,0 +1,18 @@
+---
+layout: null
+sitemap: false
+---
+{
+  "name": "Str3Dlok · Tesis doctoral",
+  "short_name": "Str3Dlok",
+  "description": "{{ site.description }}",
+  "lang": "es",
+  "start_url": "{{ '/' | relative_url }}",
+  "display": "standalone",
+  "background_color": "#0a0b0d",
+  "theme_color": "#0a0b0d",
+  "icons": [
+    { "src": "{{ '/assets/img/logo-icon.png' | relative_url }}", "sizes": "96x96", "type": "image/png" },
+    { "src": "{{ '/assets/img/apple-touch-icon.png' | relative_url }}", "sizes": "180x180", "type": "image/png" }
+  ]
+}
