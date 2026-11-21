@@ -40,6 +40,9 @@ social:
 permalink: /bitacora/:year/:month/:day/:title/
 
 defaults:
+  - scope: { path: "" }
+    values:
+      image: /assets/img/og-image.png
   - scope: { path: "", type: posts }
     values:
       layout: post
