@@ -37,6 +37,14 @@
     document.body.classList.add('spot');
     paso();
   }
+  /* Onda en el fondo al hacer clic o tocar (también en móvil) */
+  if (!calma) document.addEventListener('pointerdown', function (e) {
+    var p = document.createElement('span');
+    p.className = 'pulso'; p.style.left = e.clientX + 'px'; p.style.top = e.clientY + 'px';
+    document.body.appendChild(p);
+    setTimeout(function () { p.remove(); }, 950);
+    if (!fino) { root.style.setProperty('--mx', e.clientX + 'px'); root.style.setProperty('--my', e.clientY + 'px'); }
+  }, { passive: true });
 
   /* ---- Botón flotante: abajo cuando estás arriba, arriba cuando has bajado ---- */
   var sb = document.getElementById('scroll-btn');

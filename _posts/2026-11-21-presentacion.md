@@ -6,7 +6,6 @@ image: /assets/img/posts/2026-11-21-presentacion.webp
 description: "Presentación rápida: quién soy, de dónde vengo y por qué he empezado esta tesis doctoral."
 resumen: "Abro esta bitácora presentándome. Soy artista técnico 3D, desarrollador de videojuegos y docente, y durante los próximos años usaré este espacio como diario de mi investigación doctoral sobre gemelos digitales de patrimonio cultural."
 tags: [presentacion, diario]
-ia: "Texto redactado con apoyo de herramientas de IA a partir de las indicaciones del autor y revisado por él."
 ---
 
 ## Quién soy

@@ -9,7 +9,6 @@ resumen: "Descripción amplia (3-4 frases). Se muestra bajo el título dentro de
 tags: [diario, metodologia]               # hashtags cortos, minúsculas, sin tildes ni espacios (usar guion)
 # youtube: https://youtu.be/XXXX          # opcional, se muestra como enlace
 # sketchfab: ID_DEL_MODELO                # opcional, visor 3D embebido
-# ia: "Texto redactado con apoyo de herramientas de IA y revisado por el autor."
 ---
 
 ## Qué se está investigando

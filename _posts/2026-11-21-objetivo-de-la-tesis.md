@@ -6,7 +6,6 @@ image: /assets/img/posts/2026-11-21-objetivo.webp
 description: "Por qué esta tesis busca un procedimiento estandarizado y replicable para digitalizar patrimonio cultural."
 resumen: "El objetivo de la tesis es definir un procedimiento de digitalización de patrimonio cultural que cualquier persona pueda seguir y que tenga validez para especialistas y restauradores. La aspiración es que llegue a servir como estándar a nivel europeo."
 tags: [objetivo, patrimonio]
-ia: "Texto redactado con apoyo de herramientas de IA a partir de las indicaciones del autor y revisado por él."
 ---
 
 ## Por qué es esencial
