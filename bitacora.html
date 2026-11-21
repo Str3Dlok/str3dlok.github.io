@@ -1,7 +1,7 @@
 ---
 layout: default
-description: "Diario de avances de la tesis doctoral de Alejandro Baeza sobre digitalización 3D y gemelos digitales de patrimonio cultural."
 title: "Bitácora de investigación"
+description: "Diario de avances de la tesis doctoral de Alejandro Baeza sobre digitalización 3D y gemelos digitales de patrimonio cultural."
 nav: bitacora
 permalink: /bitacora/
 script: /assets/js/bitacora.js
@@ -13,13 +13,30 @@ script: /assets/js/bitacora.js
       <h1 class="page-title">Bitácora</h1>
       <p class="lead">Diario abierto de la investigación: qué se está explorando, qué se va descubriendo y qué conviene tener en cuenta.</p>
     </div>
-    <div class="filters" id="filters">
-      <button class="cut on" data-f="Todas">Todas</button>
-      {% assign etiquetas = site.tags | sort %}{% for t in etiquetas %}<button class="cut" data-f="{{ t[0] }}">#{{ t[0] }}</button>{% endfor %}
+
+    <!-- Buscador y filtros (se combinan entre sí) -->
+    <div class="finder" role="search">
+      <label class="search cut" for="q">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.6-3.6"/></svg>
+        <input id="q" type="search" placeholder="Buscar por palabra clave o #hashtag" autocomplete="off" aria-label="Buscar en la bitácora">
+      </label>
+      <div class="finder-row">
+        <label class="field cut"><span class="mono">Desde</span><select id="desde" aria-label="Fecha desde"><option value="">El inicio</option></select></label>
+        <label class="field cut"><span class="mono">Hasta</span><select id="hasta" aria-label="Fecha hasta"><option value="">Hoy</option></select></label>
+        <label class="field cut"><span class="mono">Orden</span><select id="orden" aria-label="Orden"><option value="desc">Más recientes</option><option value="asc">Más antiguas</option></select></label>
+      </div>
+      <div class="filters" id="filters" aria-label="Hashtags (puedes elegir varios)">
+        {% assign etiquetas = site.tags | sort %}{% for t in etiquetas %}<button class="cut" type="button" data-f="{{ t[0] }}" aria-pressed="false">#{{ t[0] }}<span class="n">{{ t[1].size }}</span></button>{% endfor %}
+      </div>
+      <div class="finder-status">
+        <span class="mono" id="cuenta" aria-live="polite"></span>
+        <button class="clear mono" id="limpiar" type="button" hidden>Limpiar filtros ×</button>
+      </div>
     </div>
+
     <div class="list" id="list">
       {% for p in site.posts %}{% include post-row.html %}{% endfor %}
     </div>
-    <p class="empty mono" id="empty" {% if site.posts.size > 0 %}hidden{% endif %}>// Aún no hay entradas aquí</p>
+    <p class="empty mono" id="empty" {% if site.posts.size > 0 %}hidden{% endif %}>// Ninguna entrada coincide con la búsqueda</p>
   </div>
 </section>

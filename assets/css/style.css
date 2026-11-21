@@ -28,25 +28,35 @@
 
 *{box-sizing:border-box;margin:0;padding:0}
 [hidden]{display:none!important}
-html{scroll-behavior:smooth;background:var(--bg)}
+html{background:var(--bg)}
 [id]{scroll-margin-top:84px}
 body{background:var(--bg);color:var(--text);font:16px/1.65 var(--sans);transition:background-color .4s var(--ease),color .4s var(--ease)}
 
-/* --- Fondo reactivo al cursor ---
-   .bg-fx   → capa fija con la rejilla base y una viñeta estática (se pinta una sola vez, capa propia en GPU)
-   .fx-glow → halo dorado que se desplaza con transform (solo composición, sin repintar)
-   .pulso   → onda que se expande al hacer clic o tocar */
-.bg-fx{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden;contain:strict;transform:translateZ(0);
-  background-color:var(--bg);
-  background-image:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px);
-  background-size:64px 64px}
-.bg-fx::after{content:"";position:absolute;inset:0;background:radial-gradient(ellipse at 50% 0%,transparent 0%,color-mix(in srgb,var(--bg) 55%,transparent) 45%,var(--bg) 85%)}
-.fx-glow{position:absolute;z-index:1;left:0;top:0;width:640px;height:640px;margin:-320px 0 0 -320px;opacity:0;transition:opacity .6s;will-change:transform;transform:translate3d(-999px,-999px,0);
-  background:radial-gradient(circle,color-mix(in srgb,var(--gold) 26%,transparent) 0%,color-mix(in srgb,var(--gold) 11%,transparent) 24%,transparent 50%)}
-.bg-fx.on .fx-glow{opacity:1}
-.pulso{position:fixed;z-index:0;pointer-events:none;width:440px;height:440px;margin:-220px 0 0 -220px;border-radius:50%;
-  box-shadow:inset 0 0 0 1.5px var(--gold);transform:scale(.05);animation:pulso .9s var(--ease) forwards}
-@keyframes pulso{to{transform:scale(1);opacity:0}}
+/* --- Fondo de píxeles y glitch ---
+   .bg-fx         → trama de puntos de 16 px con marcas en cruz cada 64 px (máscara SVG estática, se pinta una vez)
+   .bg-fx::before → líneas de barrido tipo monitor CRT (estáticas)
+   .bg-fx::after  → viñeta
+   .fx-pix        → canvas diminuto ampliado con píxeles nítidos: halo tramado, ondas, chispas y glitch (site.js) */
+.bg-fx{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden;contain:strict;transform:translateZ(0);background:var(--bg)}
+.bg-fx .trama{position:absolute;inset:0;background:var(--faint);opacity:.55;
+  -webkit-mask:url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20width='64'%20height='64'%3E%3Cg%20fill='%23000'%3E%3Crect%20x='7'%20y='7'%20width='2'%20height='2'%20fill-opacity='.55'/%3E%3Crect%20x='7'%20y='23'%20width='2'%20height='2'%20fill-opacity='.55'/%3E%3Crect%20x='7'%20y='39'%20width='2'%20height='2'%20fill-opacity='.55'/%3E%3Crect%20x='7'%20y='55'%20width='2'%20height='2'%20fill-opacity='.55'/%3E%3Crect%20x='23'%20y='7'%20width='2'%20height='2'%20fill-opacity='.55'/%3E%3Crect%20x='23'%20y='23'%20width='2'%20height='2'%20fill-opacity='.55'/%3E%3Crect%20x='23'%20y='39'%20width='2'%20height='2'%20fill-opacity='.55'/%3E%3Crect%20x='23'%20y='55'%20width='2'%20height='2'%20fill-opacity='.55'/%3E%3Crect%20x='39'%20y='7'%20width='2'%20height='2'%20fill-opacity='.55'/%3E%3Crect%20x='39'%20y='23'%20width='2'%20height='2'%20fill-opacity='.55'/%3E%3Crect%20x='39'%20y='55'%20width='2'%20height='2'%20fill-opacity='.55'/%3E%3Crect%20x='55'%20y='7'%20width='2'%20height='2'%20fill-opacity='.55'/%3E%3Crect%20x='55'%20y='23'%20width='2'%20height='2'%20fill-opacity='.55'/%3E%3Crect%20x='55'%20y='39'%20width='2'%20height='2'%20fill-opacity='.55'/%3E%3Crect%20x='55'%20y='55'%20width='2'%20height='2'%20fill-opacity='.55'/%3E%3Crect%20x='34'%20y='39'%20width='12'%20height='2'/%3E%3Crect%20x='39'%20y='34'%20width='2'%20height='12'/%3E%3C/g%3E%3C/svg%3E") 0 0/64px 64px;mask:url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20width='64'%20height='64'%3E%3Cg%20fill='%23000'%3E%3Crect%20x='7'%20y='7'%20width='2'%20height='2'%20fill-opacity='.55'/%3E%3Crect%20x='7'%20y='23'%20width='2'%20height='2'%20fill-opacity='.55'/%3E%3Crect%20x='7'%20y='39'%20width='2'%20height='2'%20fill-opacity='.55'/%3E%3Crect%20x='7'%20y='55'%20width='2'%20height='2'%20fill-opacity='.55'/%3E%3Crect%20x='23'%20y='7'%20width='2'%20height='2'%20fill-opacity='.55'/%3E%3Crect%20x='23'%20y='23'%20width='2'%20height='2'%20fill-opacity='.55'/%3E%3Crect%20x='23'%20y='39'%20width='2'%20height='2'%20fill-opacity='.55'/%3E%3Crect%20x='23'%20y='55'%20width='2'%20height='2'%20fill-opacity='.55'/%3E%3Crect%20x='39'%20y='7'%20width='2'%20height='2'%20fill-opacity='.55'/%3E%3Crect%20x='39'%20y='23'%20width='2'%20height='2'%20fill-opacity='.55'/%3E%3Crect%20x='39'%20y='55'%20width='2'%20height='2'%20fill-opacity='.55'/%3E%3Crect%20x='55'%20y='7'%20width='2'%20height='2'%20fill-opacity='.55'/%3E%3Crect%20x='55'%20y='23'%20width='2'%20height='2'%20fill-opacity='.55'/%3E%3Crect%20x='55'%20y='39'%20width='2'%20height='2'%20fill-opacity='.55'/%3E%3Crect%20x='55'%20y='55'%20width='2'%20height='2'%20fill-opacity='.55'/%3E%3Crect%20x='34'%20y='39'%20width='12'%20height='2'/%3E%3Crect%20x='39'%20y='34'%20width='2'%20height='12'/%3E%3C/g%3E%3C/svg%3E") 0 0/64px 64px}
+.bg-fx::before{content:"";position:absolute;inset:0;z-index:2;opacity:.5;
+  background:repeating-linear-gradient(0deg,transparent 0 2px,color-mix(in srgb,var(--bg) 55%,transparent) 2px 3px)}
+.bg-fx::after{content:"";position:absolute;inset:0;z-index:3;background:radial-gradient(ellipse at 50% 0%,transparent 0%,color-mix(in srgb,var(--bg) 50%,transparent) 50%,var(--bg) 92%)}
+.fx-pix{position:absolute;left:0;top:0;z-index:1;image-rendering:pixelated;image-rendering:crisp-edges}
+/* Velo que acompaña al desplazamiento entre secciones */
+.velo{position:fixed;inset:0;z-index:9;pointer-events:none;opacity:0;transition:opacity .35s var(--ease);
+  background:linear-gradient(180deg,transparent 0%,color-mix(in srgb,var(--bg) 70%,transparent) 35%,color-mix(in srgb,var(--bg) 70%,transparent) 65%,transparent 100%)}
+.velo.on{opacity:1}
+/* Aparición al hacer scroll y llegada a una sección */
+.rev{opacity:0;transform:translateY(18px)}
+.rev.visto{opacity:1;transform:none;transition:opacity .7s var(--ease),transform .7s var(--ease)}
+.llega{animation:llega .9s var(--ease)}
+@keyframes llega{from{opacity:.15;transform:translateY(22px);filter:blur(2px)}to{opacity:1;transform:none;filter:none}}
+/* Glitch breve al pasar por el título principal */
+.hero h1:hover{animation:glitch .45s steps(2) 1}
+@keyframes glitch{0%{text-shadow:2px 0 var(--gold),-2px 0 color-mix(in srgb,var(--text) 50%,transparent)}25%{transform:translateX(-2px);clip-path:inset(10% 0 55% 0)}50%{transform:translateX(2px);clip-path:inset(55% 0 8% 0)}75%{transform:none;clip-path:none;text-shadow:-2px 0 var(--gold),2px 0 color-mix(in srgb,var(--text) 50%,transparent)}100%{text-shadow:none}}
+
 main,footer,header,.ai-note{position:relative;z-index:1}
 
 a{color:inherit;text-decoration:none}
@@ -142,11 +152,28 @@ a.tag:hover,.tag.a{color:var(--gold);border-color:color-mix(in srgb,var(--gold) 
 .pipe span{display:block;margin-bottom:8px}
 .pipe p{font-size:.88rem;color:var(--muted)}
 
+/* --- Bitácora: buscador y filtros --- */
+.finder{margin-top:36px;display:grid;gap:12px}
+.search{--c:12px;display:flex;align-items:center;gap:12px;padding:0 16px;border:1px solid var(--line);background:var(--panel);transition:border-color .2s}
+.search:focus-within{border-color:var(--gold);--cc:var(--gold)}
+.search svg{width:18px;height:18px;flex:none;fill:none;stroke:var(--muted);stroke-width:1.8;stroke-linecap:round}
+.search input{flex:1;min-width:0;background:transparent;border:0;outline:0;color:var(--text);font:inherit;font-size:1rem;padding:14px 0}
+.search input::placeholder{color:var(--dim)}
+.finder-row{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.field{--c:8px;min-width:0;display:flex;flex-direction:column;gap:2px;padding:8px 12px;border:1px solid var(--line);background:var(--panel);transition:border-color .2s}
+.field:focus-within{border-color:var(--gold);--cc:var(--gold)}
+.field .mono{font-size:.62rem}
+.field select{width:100%;min-width:0;background:transparent;border:0;outline:0;color:var(--text);font:inherit;font-size:.92rem;cursor:pointer;padding:2px 0}
+.field select option{background:var(--panel);color:var(--text)}
+.filters .n{margin-left:8px;font-size:.62rem;opacity:.6}
+.finder-status{display:flex;justify-content:space-between;align-items:center;min-height:24px}
+.clear{background:none;border:0;color:var(--gold);cursor:pointer;font-size:.7rem}
+.clear:hover{text-decoration:underline}
+
 /* --- Bitácora: filas --- */
 .list{margin-top:24px}
-.filters{display:flex;flex-wrap:wrap;gap:8px;margin:32px 0 12px;justify-content:center}
+.filters{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
 .filters button{--c:7px;font-family:var(--mono);font-size:.72rem;letter-spacing:.06em;background:transparent;color:var(--muted);border:1px solid var(--line);padding:8px 14px;cursor:pointer;transition:color .2s,border-color .2s,background .2s}
-.filters button:first-child{text-transform:uppercase;letter-spacing:.1em}
 .filters button:hover{color:var(--text);border-color:var(--faint)}
 .filters button.on{color:var(--bg);background:var(--gold);border-color:var(--gold);--cc:var(--gold)}
 .post{display:grid;grid-template-columns:168px 1fr auto;gap:28px;align-items:start;padding:24px 16px;margin:0 -16px;border-top:1px solid var(--line);transition:background .3s}
@@ -254,6 +281,8 @@ footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px}
   .social{gap:10px}
   .soc{width:46px;height:46px}
   .pn{grid-template-columns:1fr}
+  .finder-row{grid-template-columns:1fr 1fr}
+  .finder-row .field:last-child{grid-column:1/-1}
   .pn-next{grid-column:1}
   .scroll-btn{right:14px;bottom:14px}
 }
