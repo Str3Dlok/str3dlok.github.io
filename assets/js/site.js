@@ -2,9 +2,10 @@
 (function () {
   var root = document.documentElement;
 
-  /* ---- Temas: oscuro → claro → plano ---- */
-  var temas = ['oscuro', 'claro', 'plano'];
-  var nombres = { oscuro: 'Oscuro', claro: 'Claro', plano: 'Plano' };
+  /* ---- Temas: oscuro → claro → neón ---- */
+  var temas = ['oscuro', 'claro', 'neon'];
+  var nombres = { oscuro: 'Oscuro', claro: 'Claro', neon: 'Neón' };
+  if (temas.indexOf(root.dataset.theme) < 0) root.dataset.theme = 'oscuro';
   var btn = document.getElementById('theme-btn');
   function pintarTema() {
     var t = root.dataset.theme || 'oscuro';
@@ -19,13 +20,16 @@
   pintarTema();
 
   /* ---- Rejilla de fondo que se ilumina bajo el cursor ---- */
-  var fino = window.matchMedia('(pointer:fine)').matches;
+  // Con ratón (aunque el equipo tenga "reducir animaciones") el fondo sigue al cursor.
+  // Si se pide menos movimiento, el halo va directo al cursor sin suavizado.
+  var fino = window.matchMedia('(any-pointer:fine)').matches;
   var calma = window.matchMedia('(prefers-reduced-motion:reduce)').matches;
-  if (fino && !calma) {
+  var suave = calma ? 1 : 0.14;
+  if (fino) {
     // El halo sigue al cursor con un pequeño retardo (interpolación) para que se sienta fluido
     var tx = innerWidth / 2, ty = innerHeight * 0.3, cx = tx, cy = ty, corriendo = false;
     function paso() {
-      cx += (tx - cx) * 0.12; cy += (ty - cy) * 0.12;
+      cx += (tx - cx) * suave; cy += (ty - cy) * suave;
       root.style.setProperty('--mx', cx.toFixed(1) + 'px');
       root.style.setProperty('--my', cy.toFixed(1) + 'px');
       if (Math.abs(tx - cx) + Math.abs(ty - cy) > 0.5) requestAnimationFrame(paso); else corriendo = false;
@@ -38,7 +42,7 @@
     paso();
   }
   /* Onda en el fondo al hacer clic o tocar (también en móvil) */
-  if (!calma) document.addEventListener('pointerdown', function (e) {
+  document.addEventListener('pointerdown', function (e) {
     var p = document.createElement('span');
     p.className = 'pulso'; p.style.left = e.clientX + 'px'; p.style.top = e.clientY + 'px';
     document.body.appendChild(p);

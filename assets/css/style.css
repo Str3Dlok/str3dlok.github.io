@@ -3,20 +3,20 @@
 /* --- Temas --- */
 :root,[data-theme="oscuro"]{
   --bg:#0a0b0d; --panel:#111317; --panel-2:#161920; --line:#24272e; --faint:#3a3e47;
-  --text:#e7e8ea; --body:#c4c7cc; --muted:#8b9099; --dim:#5b616b;
+  --text:#ecedef; --body:#cdd0d5; --muted:#9a9fa8; --dim:#737985;
   --gold:#c9a44c; --gold-soft:rgba(201,164,76,.12); --glow:rgba(201,164,76,.35);
   --logo-filter:none;
 }
 [data-theme="claro"]{
-  --bg:#f3f2ee; --panel:#ffffff; --panel-2:#ebe9e3; --line:#dcdad3; --faint:#c5c3bb;
-  --text:#16171a; --body:#33363c; --muted:#5c616b; --dim:#8b9099;
-  --gold:#a07a22; --gold-soft:rgba(160,122,34,.12); --glow:rgba(160,122,34,.30);
-  --logo-filter:brightness(.32) contrast(1.15);
+  --bg:#f4f3ef; --panel:#ffffff; --panel-2:#eceae4; --line:#d8d5cc; --faint:#bdb9ae;
+  --text:#101114; --body:#26292e; --muted:#454a53; --dim:#656a74;
+  --gold:#8a6414; --gold-soft:rgba(138,100,20,.12); --glow:rgba(138,100,20,.30);
+  --logo-filter:brightness(.28) contrast(1.2);
 }
-[data-theme="plano"]{ /* plano técnico / blueprint */
-  --bg:#0a1a2f; --panel:#0e2340; --panel-2:#12294b; --line:#1c3a63; --faint:#2a4d7c;
-  --text:#e6eef8; --body:#c3d3e8; --muted:#8fa6c4; --dim:#5b7aa3;
-  --gold:#5fd0ff; --gold-soft:rgba(95,208,255,.14); --glow:rgba(95,208,255,.35);
+[data-theme="neon"]{ /* verde neón oscuro */
+  --bg:#06110c; --panel:#0a1912; --panel-2:#0e2118; --line:#163326; --faint:#225039;
+  --text:#e4f6ec; --body:#c2dccf; --muted:#8fb3a1; --dim:#678c7a;
+  --gold:#3ee38f; --gold-soft:rgba(62,227,143,.12); --glow:rgba(62,227,143,.35);
   --logo-filter:none;
 }
 :root{
@@ -237,7 +237,7 @@ footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px}
 @keyframes nudge{50%{transform:translateY(3px)}}
 @keyframes nudgeup{50%{transform:translateY(-3px)}}
 
-@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}html{scroll-behavior:auto}}
+@media (prefers-reduced-motion:reduce){.spin,.scroll-btn span{animation:none}}
 
 /* --- Móvil --- */
 @media (max-width:860px){

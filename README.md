@@ -14,7 +14,7 @@ Web y bitácora de la investigación doctoral de Alejandro Baeza (Str3Dlok). Est
 `title`, `date`, `author`, `image`, `description` (corta, se ve en la bitácora), `resumen` (amplia, dentro de la entrada) y `tags` (hashtags). Opcionales: `youtube` y `sketchfab`. La declaración de uso de IA va en el pie de todas las páginas.
 
 ## Interfaz
-Tres temas (Oscuro, Claro y Plano) que se guardan en el navegador. Incluye una rejilla que se ilumina bajo el cursor, un botón flotante para ir arriba o abajo, desplazamiento suave en los enlaces internos, migas de pan y navegación anterior/siguiente (también con las flechas del teclado).
+Tres temas (Oscuro, Claro y Neón) que se guardan en el navegador. Incluye una rejilla que se ilumina bajo el cursor, un botón flotante para ir arriba o abajo, desplazamiento suave en los enlaces internos, migas de pan y navegación anterior/siguiente (también con las flechas del teclado).
 
 ## Normas de contenido
 La bitácora es pública. No incluye resultados concretos, tablas, parámetros, herramientas propias ni nombres de personas, entidades, obras o colaboradores.
