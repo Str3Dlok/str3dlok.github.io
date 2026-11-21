@@ -16,18 +16,22 @@
   });
   pintarTema();
 
-  /* ================= Fondo de píxeles y glitch =================
-     Un canvas diminuto (1 píxel = 1 celda de 8 px) que el navegador amplía con "image-rendering: pixelated".
-     Solo se redibuja cuando hay algo que mostrar: halo del cursor y su estela, onda al clic, píxeles que parpadean o un glitch. */
-  var CEL = 8, cv = document.querySelector('.fx-pix'), cx2 = cv && cv.getContext('2d', { alpha: true });
-  var cols = 0, filas = 0, oro = '#c9a44c', txt = '#ecedef';
-  var mx = -99, my = -99, tx = -99, ty = -99, ondas = [], chispas = [], glitch = null, pendiente = false, ultimo = 0;
+  /* ================= Fondo de píxeles =================
+     Un canvas diminuto (1 píxel = 1 celda de 5 px) que el navegador amplía con "image-rendering: pixelated".
+     Solo se redibuja cuando hay algo que mostrar: halo del cursor y su estela, onda al clic o algún píxel de ambiente. */
+  var CEL = 5, cv = document.querySelector('.fx-pix'), cx2 = cv && cv.getContext('2d', { alpha: true });
+  var cols = 0, filas = 0, oro = '#c9a44c';
+  var mx = -99, my = -99, tx = -99, ty = -99, ondas = [], chispas = [], pendiente = false, ultimo = 0;
   var estela = [], VIDA = 650; // puntos recientes del cursor (la "cola") y su duración en ms
   // Matriz de Bayer 4x4: tramado retro para que el halo se vea "pixelado" y no como un degradado liso
   var BAYER = [0, 8, 2, 10, 12, 4, 14, 6, 3, 11, 1, 9, 15, 7, 13, 5];
+  // Tabla del halo (dx, dy, intensidad) calculada una sola vez: evita raíces cuadradas en cada fotograma
+  var HALO = [], RH = 29;
+  for (var hy = -RH; hy <= RH; hy++) for (var hx = -RH; hx <= RH; hx++) {
+    var hd = Math.sqrt(hx * hx + hy * hy); if (hd <= RH) { var hk = 1 - hd / RH; HALO.push(hx, hy, hk * hk); }
+  }
   function leerColores() {
-    var s = getComputedStyle(root);
-    oro = s.getPropertyValue('--gold').trim() || oro; txt = s.getPropertyValue('--text').trim() || txt; pedir();
+    oro = getComputedStyle(root).getPropertyValue('--gold').trim() || oro; pedir();
   }
   function medir() {
     if (!cv) return;
@@ -43,15 +47,12 @@
     if (tx > -50) {
       mx += (tx - mx) * 0.22; my += (ty - my) * 0.22;
       if (Math.abs(tx - mx) + Math.abs(ty - my) > 0.05) vivo = rapido = true;
-      var R = 18, R2 = R * R, ccx = mx / CEL, ccy = my / CEL;
+      var bx = mx / CEL | 0, by = my / CEL | 0;
       cx2.fillStyle = oro;
-      for (var y = Math.max(0, ccy - R | 0); y <= Math.min(filas - 1, ccy + R | 0); y++) {
-        for (var x = Math.max(0, ccx - R | 0); x <= Math.min(cols - 1, ccx + R | 0); x++) {
-          var dx = x + .5 - ccx, dy = y + .5 - ccy, d2 = dx * dx + dy * dy;
-          if (d2 > R2) continue;
-          var k = 1 - Math.sqrt(d2) / R; k = k * k;
-          if (k * 16 > BAYER[(y & 3) * 4 + (x & 3)]) { cx2.globalAlpha = .12 + k * .5; cx2.fillRect(x, y, 1, 1); }
-        }
+      for (var h = 0; h < HALO.length; h += 3) {
+        var x = bx + HALO[h], y = by + HALO[h + 1], k = HALO[h + 2];
+        if (x < 0 || y < 0 || x >= cols || y >= filas) continue;
+        if (k * 16 > BAYER[(y & 3) * 4 + (x & 3)]) { cx2.globalAlpha = .1 + k * .45; cx2.fillRect(x, y, 1, 1); }
       }
     }
     // 1b) Estela: la cola del cursor se desvanece hasta cero, como una serpiente de píxeles
@@ -64,11 +65,11 @@
       vivo = rapido = true; cx2.fillStyle = oro;
       for (var e = 1; e < estela.length; e++) {
         var A = estela[e - 1], B = estela[e], vida = 1 - (t - B.t) / VIDA;
-        var pasos = Math.max(1, Math.hypot(B.x - A.x, B.y - A.y) / CEL | 0), grosor = 1 + vida * 2 | 0;
-        cx2.globalAlpha = vida * vida * .55;
+        var pasos = Math.max(1, Math.hypot(B.x - A.x, B.y - A.y) / CEL | 0);
+        cx2.globalAlpha = vida * vida * .6;
         for (var s = 0; s <= pasos; s++) {
           var px = (A.x + (B.x - A.x) * s / pasos) / CEL | 0, py = (A.y + (B.y - A.y) * s / pasos) / CEL | 0;
-          cx2.fillRect(px - (grosor >> 1), py - (grosor >> 1), grosor, grosor);
+          cx2.fillRect(px, py, 1, 1);
         }
       }
     }
@@ -76,7 +77,7 @@
     for (var i = ondas.length - 1; i >= 0; i--) {
       var o = ondas[i], p = (t - o.t0) / 700;
       if (p >= 1) { ondas.splice(i, 1); continue; }
-      vivo = rapido = true; var r = 4 + p * 28, a = 1 - p;
+      vivo = rapido = true; var r = 6 + p * 45, a = 1 - p;
       cx2.fillStyle = oro;
       for (var ang = 0; ang < 6.283; ang += 1.2 / r) {
         cx2.globalAlpha = a * .8; cx2.fillRect(Math.round(o.x + Math.cos(ang) * r), Math.round(o.y + Math.sin(ang) * r), 1, 1);
@@ -86,24 +87,14 @@
     for (i = chispas.length - 1; i >= 0; i--) {
       var c = chispas[i], q = (t - c.t0) / c.dur;
       if (q >= 1) { chispas.splice(i, 1); continue; }
-      vivo = true; cx2.fillStyle = c.oro ? oro : txt; cx2.globalAlpha = Math.sin(q * Math.PI) * (c.oro ? .55 : .25);
+      if (q < 0) { vivo = true; continue; }
+      var sm = Math.sin(q * Math.PI); sm = sm * sm * (3 - 2 * sm);
+      vivo = true; cx2.fillStyle = oro; cx2.globalAlpha = sm * .3;
       cx2.fillRect(c.x, c.y, 1, 1);
     }
-    // 4) Glitch: franjas horizontales desplazadas con separación de color durante unos milisegundos
-    if (glitch) {
-      if (t - glitch.t0 > glitch.dur) glitch = null;
-      else {
-        vivo = rapido = true;
-        glitch.franjas.forEach(function (f) {
-          var off = (Math.random() * 12 - 6) | 0;
-          cx2.globalAlpha = .18; cx2.fillStyle = oro; cx2.fillRect(f.x + off, f.y, f.w, f.h);
-          cx2.globalAlpha = .12; cx2.fillStyle = txt; cx2.fillRect(f.x - off + 1, f.y, f.w, 1);
-        });
-      }
-    }
     cx2.globalAlpha = 1;
-    // Movimiento (halo, onda, glitch) a 60 fps; solo ambiente (chispas) a ~24 fps para ahorrar
-    if (vivo) { if (rapido) pedir(); else setTimeout(pedir, 42); }
+    // Movimiento (halo, estela, onda) a 60 fps; solo ambiente (chispas) a ~30 fps para ahorrar
+    if (vivo) { if (rapido) pedir(); else setTimeout(pedir, 33); }
   }
   if (cv) {
     medir(); leerColores();
@@ -116,18 +107,13 @@
     document.addEventListener('pointerdown', function (e) {
       ondas.push({ x: e.clientX / CEL | 0, y: e.clientY / CEL | 0, t0: performance.now() }); pedir();
     }, { passive: true });
-    // Ambiente: chispas y glitch esporádicos, en pausa si la pestaña no está visible
+    // Ambiente: muy pocas chispas, lentas y tenues, en pausa si la pestaña no está visible
     setInterval(function () {
-      if (document.hidden) return;
-      var n = 3 + Math.random() * 4 | 0, ahora = performance.now();
-      for (var j = 0; j < n; j++) chispas.push({ x: Math.random() * cols | 0, y: Math.random() * filas | 0, t0: ahora + Math.random() * 600, dur: 700 + Math.random() * 900, oro: Math.random() < .5 });
-      if (!glitch && Math.random() < .14) {
-        var fr = [], m = 1 + Math.random() * 3 | 0, y0 = Math.random() * filas | 0;
-        for (var k = 0; k < m; k++) fr.push({ x: Math.random() * cols * .5 | 0, y: y0 + k * (1 + Math.random() * 3 | 0), w: 12 + Math.random() * cols * .4 | 0, h: 1 + Math.random() * 2 | 0 });
-        glitch = { t0: ahora, dur: 140 + Math.random() * 160, franjas: fr };
-      }
+      if (document.hidden || Math.random() < .35) return;
+      var ahora = performance.now();
+      chispas.push({ x: Math.random() * cols | 0, y: Math.random() * filas | 0, t0: ahora + Math.random() * 800, dur: 2200 + Math.random() * 1600 });
       pedir();
-    }, 900);
+    }, 1800);
   }
 
   /* ================= Desplazamiento animado entre secciones =================
