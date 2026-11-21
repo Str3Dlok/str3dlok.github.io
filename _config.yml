@@ -10,13 +10,12 @@ timezone: Europe/Madrid
 # Enlaces de las entradas: /bitacora/AAAA/MM/DD/titulo/
 permalink: /bitacora/:year/:month/:day/:title/
 
-# Categorías de la bitácora (filtros). Cada entrada usa una en su "category".
-categorias:
-  - Línea A
-  - Línea B
-  - Línea C
-  - Herramientas
-  - Diario
+# Valores por defecto de cada entrada (ver _plantillas/entrada.md)
+defaults:
+  - scope: { path: "", type: posts }
+    values:
+      layout: post
+      author: "Alejandro Baeza"
 
 markdown: kramdown
 plugins:

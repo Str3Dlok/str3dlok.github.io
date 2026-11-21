@@ -4,16 +4,17 @@ Web y bitácora de la investigación doctoral de Alejandro Baeza (Str3Dlok). Est
 
 ## Estructura
 - `index.html`: página de inicio.
-- `bitacora.html`: archivo de entradas con filtros (las categorías se definen en `_config.yml`).
+- `bitacora.html`: archivo de entradas con filtro por hashtag (se generan solos a partir de las entradas). Admite `?tag=nombre`.
 - `contacto.html`: perfil y redes.
 - `_posts/`: una entrada por archivo, con el nombre `AAAA-MM-DD-titulo.md`.
-- `_plantillas/entrada.md`: plantilla para nuevas entradas (no se publica).
-- `assets/`: estilos, script del filtro e imágenes. Las imágenes de las entradas van en `assets/img/posts/`.
+- `_plantillas/entrada.md`: plantilla con todos los campos de una entrada (no se publica).
+- `assets/`: estilos, scripts (`site.js` común, `bitacora.js` filtro) e imágenes. Las imágenes de las entradas van en `assets/img/posts/`.
 
-## Publicar una entrada
-1. Copiar `_plantillas/entrada.md` a `_posts/` con la fecha y un título corto.
-2. Rellenar el título, la categoría y el texto.
-3. Hacer commit en `main`. GitHub Pages reconstruye la web en 1–2 minutos.
+## Campos de cada entrada
+`title`, `date`, `author`, `image`, `description` (corta, se ve en la bitácora), `resumen` (amplia, dentro de la entrada) y `tags` (hashtags). Opcionales: `youtube`, `sketchfab`, `ia`.
+
+## Interfaz
+Tres temas (Oscuro, Claro y Plano) que se guardan en el navegador. Incluye una rejilla que se ilumina bajo el cursor, un botón flotante para ir arriba o abajo, desplazamiento suave en los enlaces internos, migas de pan y navegación anterior/siguiente (también con las flechas del teclado).
 
 ## Normas de contenido
 La bitácora es pública. No incluye resultados concretos, tablas, parámetros, herramientas propias ni nombres de personas, entidades, obras o colaboradores.

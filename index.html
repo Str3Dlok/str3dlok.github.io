@@ -10,7 +10,7 @@ nav: inicio
       <p class="lead">Un flujo de trabajo validable y replicable, pensado para que personas no expertas puedan digitalizar patrimonio con la fiabilidad que exigen restauradores y especialistas.</p>
       <div class="actions">
         <a class="btn" href="{{ '/bitacora/' | relative_url }}">Ver avances →</a>
-        <a class="btn ghost" href="{{ '/contacto/' | relative_url }}">Sobre mí</a>
+        <a class="btn ghost" href="#lineas">Explorar ↓</a>
       </div>
       <div class="stats">
         <div><b>3</b><span class="mono">Líneas</span></div>
@@ -22,19 +22,19 @@ nav: inicio
       <span class="hud tl">SCAN_ID 0001</span><span class="hud tr">LOD 0—4</span>
       <span class="hud bl">MESH · TEX · VAL</span><span class="hud br">● DIGITAL TWIN</span>
       <svg viewBox="0 0 400 400" fill="none">
-        <g class="spin" stroke="#24272e"><circle cx="200" cy="200" r="150"/><circle cx="200" cy="200" r="150" stroke="#c9a44c" stroke-dasharray="4 18"/></g>
-        <g stroke="#5b616b"><path d="M200 90 295 145v110l-95 55-95-55V145z"/><path d="M200 90v220M105 145l95 55 95-55"/>
-          <path d="M152 117.5l95 55M247 117.5l-95 55M105 200l95 55 95-55M152 282.5V172.5M247 282.5V172.5" stroke="#3a3e47"/></g>
-        <g fill="#c9a44c"><circle cx="200" cy="200" r="3"/><circle cx="295" cy="145" r="2.5"/><circle cx="105" cy="255" r="2.5"/><circle cx="200" cy="90" r="2.5"/></g>
+        <g class="spin"><circle class="s-line" cx="200" cy="200" r="150"/><circle class="s-gold" cx="200" cy="200" r="150" stroke-dasharray="4 18"/></g>
+        <g class="s-dim"><path d="M200 90 295 145v110l-95 55-95-55V145z"/><path d="M200 90v220M105 145l95 55 95-55"/>
+          <path d="M152 117.5l95 55M247 117.5l-95 55M105 200l95 55 95-55M152 282.5V172.5M247 282.5V172.5" class="s-faint"/></g>
+        <g class="f-gold"><circle cx="200" cy="200" r="3"/><circle cx="295" cy="145" r="2.5"/><circle cx="105" cy="255" r="2.5"/><circle cx="200" cy="90" r="2.5"/></g>
       </svg>
     </div>
   </div>
 </div>
 
-<section class="tight">
+<section class="tight" id="lineas">
   <div class="wrap">
     <div class="label mono">Líneas de investigación</div>
-    <h2>Tres frentes, un mismo flujo</h2>
+    <h2>Tres frentes, un <a class="inline" href="#flujo">mismo flujo</a></h2>
     <div class="grid3 lines">
       <div class="card"><div class="num">A</div><span class="tag a">Caso práctico</span><h3>Digitalización de obra existente</h3><p>De la captura de una obra física a su gemelo digital en tiempo real, con distintos niveles de calidad y control de resolución.</p></div>
       <div class="card"><div class="num">B</div><span class="tag">Proyecto de investigación</span><h3>Patrimonio perdido</h3><p>Reconstrucción digital de obras y espacios que ya no existen a partir de documentación y fuentes indirectas.</p></div>
@@ -43,7 +43,7 @@ nav: inicio
   </div>
 </section>
 
-<section class="tight">
+<section class="tight" id="flujo">
   <div class="wrap">
     <div class="label mono">Flujo de trabajo</div>
     <h2>Del objeto físico al gemelo digital</h2>
@@ -64,7 +64,7 @@ nav: inicio
       <a class="btn ghost" href="{{ '/bitacora/' | relative_url }}">Todo el archivo →</a>
     </div>
     <div class="list">
-      {% for p in site.posts limit:3 %}{% include post-row.html p=p %}{% endfor %}
+      {% for p in site.posts limit:3 %}{% include post-row.html %}{% endfor %}
       {% if site.posts.size == 0 %}<p class="empty mono">// Primera entrada en preparación</p>{% endif %}
     </div>
   </div>

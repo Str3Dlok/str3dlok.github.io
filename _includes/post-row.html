@@ -1,9 +1,11 @@
-<a class="post" href="{{ include.p.url | relative_url }}" data-cat="{{ include.p.category }}">
-  {% if include.p.image %}<img class="thumb" src="{{ include.p.image | relative_url }}" alt="" loading="lazy">{% else %}<div class="thumb"></div>{% endif %}
-  <div>
-    <span class="tag{% if include.p.category == 'Línea A' %} a{% endif %}">{{ include.p.category | default: 'Diario' }}</span>
-    <h3>{{ include.p.title }}</h3>
-    <p>{{ include.p.excerpt | strip_html | truncate: 160 }}</p>
+{%- comment -%} Fila de la bitácora. Usa la variable de bucle "p". {%- endcomment -%}
+<a class="post" href="{{ p.url | relative_url }}" data-tags="{{ p.tags | join: '|' }}">
+  <div class="thumb">{% if p.image %}<img src="{{ p.image | relative_url }}" alt="" loading="lazy">{% endif %}</div>
+  <div class="post-info">
+    <h3>{{ p.title }}</h3>
+    <span class="sep"></span>
+    <p>{{ p.description }}</p>
+    <div class="tags">{% for t in p.tags limit:2 %}<span class="tag">#{{ t }}</span>{% endfor %}</div>
   </div>
-  <span class="arrow mono">{{ include.p.date | date: '%d/%m/%Y' }} →</span>
+  <time class="date mono" datetime="{{ p.date | date: '%Y-%m-%d' }}">{{ p.date | date: '%d/%m/%Y' }}</time>
 </a>

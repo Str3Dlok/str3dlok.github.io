@@ -1,25 +1,41 @@
 ---
 layout: default
 ---
-<section>
-  <article class="wrap article">
-    <a class="mono" href="{{ '/bitacora/' | relative_url }}">← Volver a la bitácora</a>
-    <div style="margin-top:36px"><span class="tag a">{{ page.category | default: 'Diario' }}</span></div>
-    <h1 class="post-title">{{ page.title }}</h1>
-    <div class="meta"><span class="mono">{{ page.date | date: '%d/%m/%Y' }}</span></div>
+<section class="post-page">
+  <div class="wrap">
+    <nav class="crumbs mono" aria-label="Ruta">
+      <a href="{{ '/' | relative_url }}">Inicio</a><span>/</span><a href="{{ '/bitacora/' | relative_url }}">Bitácora</a><span>/</span><em>{{ page.title }}</em>
+    </nav>
 
-    {% if page.image %}<img class="cover" src="{{ page.image | relative_url }}" alt="">{% endif %}
+    {% if page.image %}<figure class="post-hero"><img src="{{ page.image | relative_url }}" alt=""></figure>{% endif %}
 
-    {{ content }}
+    <div class="post-grid">
+      <article class="article">
+        <h1 class="post-title">{{ page.title }}</h1>
+        <span class="sep wide"></span>
+        <p class="resumen">{{ page.resumen | default: page.description }}</p>
 
-    {% if page.sketchfab %}
-    <div class="embed"><iframe title="Modelo 3D" src="https://sketchfab.com/models/{{ page.sketchfab }}/embed?ui_theme=dark" allow="autoplay; fullscreen; xr-spatial-tracking" loading="lazy"></iframe></div>
-    {% endif %}
+        <div class="post-body">{{ content }}</div>
 
-    {% if page.youtube %}
-    <a class="btn ghost" href="{{ page.youtube }}" target="_blank" rel="noopener">▶ Ver vídeo en YouTube ↗</a>
-    {% endif %}
+        {% if page.sketchfab %}
+        <div class="embed"><iframe title="Modelo 3D" src="https://sketchfab.com/models/{{ page.sketchfab }}/embed?ui_theme=dark" allow="autoplay; fullscreen; xr-spatial-tracking" loading="lazy"></iframe></div>
+        {% endif %}
+        {% if page.youtube %}<a class="btn ghost" href="{{ page.youtube }}" target="_blank" rel="noopener">▶ Ver vídeo en YouTube ↗</a>{% endif %}
+        {% if page.ia %}<div class="note">Declaración: {{ page.ia }}</div>{% endif %}
+      </article>
 
-    {% if page.ia %}<div class="note">Declaración: {{ page.ia }}</div>{% endif %}
-  </article>
+      <aside class="post-side">
+        <div class="side-block"><span class="mono">Publicado</span><b>{{ page.date | date: '%d/%m/%Y' }}</b></div>
+        <div class="side-block"><span class="mono">Autor</span><b>{{ page.author }}</b></div>
+        <div class="side-block"><span class="mono">Hashtags</span>
+          <div class="tags">{% for t in page.tags %}<a class="tag" href="{{ '/bitacora/' | relative_url }}?tag={{ t }}">#{{ t }}</a>{% endfor %}</div>
+        </div>
+      </aside>
+    </div>
+
+    <nav class="pn" aria-label="Entradas">
+      {% if page.previous %}<a class="pn-prev" href="{{ page.previous.url | relative_url }}" data-key="prev"><span class="mono">← Anterior</span><b>{{ page.previous.title }}</b></a>{% else %}<span></span>{% endif %}
+      {% if page.next %}<a class="pn-next" href="{{ page.next.url | relative_url }}" data-key="next"><span class="mono">Siguiente →</span><b>{{ page.next.title }}</b></a>{% endif %}
+    </nav>
+  </div>
 </section>
