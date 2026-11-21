@@ -1,0 +1,27 @@
+# Configuración del sitio · Str3Dlok / Tesis
+title: "Str3Dlok · Tesis doctoral"
+description: "Gemelos digitales de patrimonio cultural: bitácora de investigación doctoral de Alejandro Baeza (Str3Dlok)."
+author: "Alejandro Baeza"
+lang: es
+url: "https://str3dlok.github.io"
+baseurl: ""
+timezone: Europe/Madrid
+
+# Enlaces de las entradas: /bitacora/AAAA/MM/DD/titulo/
+permalink: /bitacora/:year/:month/:day/:title/
+
+# Categorías de la bitácora (filtros). Cada entrada usa una en su "category".
+categorias:
+  - Línea A
+  - Línea B
+  - Línea C
+  - Herramientas
+  - Diario
+
+markdown: kramdown
+plugins:
+  - jekyll-seo-tag
+
+exclude:
+  - README.md
+  - _plantillas

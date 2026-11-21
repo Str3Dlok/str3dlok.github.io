@@ -1,0 +1,9 @@
+<a class="post" href="{{ include.p.url | relative_url }}" data-cat="{{ include.p.category }}">
+  {% if include.p.image %}<img class="thumb" src="{{ include.p.image | relative_url }}" alt="" loading="lazy">{% else %}<div class="thumb"></div>{% endif %}
+  <div>
+    <span class="tag{% if include.p.category == 'Línea A' %} a{% endif %}">{{ include.p.category | default: 'Diario' }}</span>
+    <h3>{{ include.p.title }}</h3>
+    <p>{{ include.p.excerpt | strip_html | truncate: 160 }}</p>
+  </div>
+  <span class="arrow mono">{{ include.p.date | date: '%d/%m/%Y' }} →</span>
+</a>

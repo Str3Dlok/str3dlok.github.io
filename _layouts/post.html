@@ -1,0 +1,25 @@
+---
+layout: default
+---
+<section>
+  <article class="wrap article">
+    <a class="mono" href="{{ '/bitacora/' | relative_url }}">← Volver a la bitácora</a>
+    <div style="margin-top:36px"><span class="tag a">{{ page.category | default: 'Diario' }}</span></div>
+    <h1 class="post-title">{{ page.title }}</h1>
+    <div class="meta"><span class="mono">{{ page.date | date: '%d/%m/%Y' }}</span></div>
+
+    {% if page.image %}<img class="cover" src="{{ page.image | relative_url }}" alt="">{% endif %}
+
+    {{ content }}
+
+    {% if page.sketchfab %}
+    <div class="embed"><iframe title="Modelo 3D" src="https://sketchfab.com/models/{{ page.sketchfab }}/embed?ui_theme=dark" allow="autoplay; fullscreen; xr-spatial-tracking" loading="lazy"></iframe></div>
+    {% endif %}
+
+    {% if page.youtube %}
+    <a class="btn ghost" href="{{ page.youtube }}" target="_blank" rel="noopener">▶ Ver vídeo en YouTube ↗</a>
+    {% endif %}
+
+    {% if page.ia %}<div class="note">Declaración: {{ page.ia }}</div>{% endif %}
+  </article>
+</section>

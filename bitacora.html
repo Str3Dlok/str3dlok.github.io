@@ -1,0 +1,22 @@
+---
+layout: default
+title: Bitácora
+nav: bitacora
+permalink: /bitacora/
+script: /assets/js/bitacora.js
+---
+<section>
+  <div class="wrap">
+    <div class="label mono">Archivo de avances</div>
+    <h1 class="page-title">Bitácora</h1>
+    <p class="lead">Diario abierto de la investigación: qué se está explorando, qué se va descubriendo y qué conviene tener en cuenta.</p>
+    <div class="filters" id="filters">
+      <button class="on" data-f="Todas">Todas</button>
+      {% for c in site.categorias %}<button data-f="{{ c }}">{{ c }}</button>{% endfor %}
+    </div>
+    <div class="list" id="list">
+      {% for p in site.posts %}{% include post-row.html p=p %}{% endfor %}
+    </div>
+    <p class="empty mono" id="empty" {% if site.posts.size > 0 %}hidden{% endif %}>// Aún no hay entradas aquí</p>
+  </div>
+</section>
