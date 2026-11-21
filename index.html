@@ -3,54 +3,53 @@ layout: default
 nav: inicio
 ---
 <div class="wrap">
-  <div class="hero">
-    <div>
-      <div class="label mono">Tesis doctoral · 2026 — 2030</div>
-      <h1>Gemelos digitales<br>de patrimonio <span class="gold">cultural</span></h1>
-      <p class="lead">Un flujo de trabajo validable y replicable, pensado para que personas no expertas puedan digitalizar patrimonio con la fiabilidad que exigen restauradores y especialistas.</p>
-      <div class="actions">
-        <a class="btn" href="{{ '/bitacora/' | relative_url }}">Ver avances →</a>
-        <a class="btn ghost" href="#lineas">Explorar ↓</a>
-      </div>
-      <div class="stats">
-        <div><b>3</b><span class="mono">Líneas</span></div>
-        <div><b>2030</b><span class="mono">Defensa prevista</span></div>
-        <div><b>{{ site.posts.size | prepend: '0' | slice: -2, 2 }}</b><span class="mono">Entradas</span></div>
-      </div>
+  <div class="hero center">
+    <!-- Visual de fondo: malla 3D ligera en SVG -->
+    <svg class="hero-bg" viewBox="0 0 400 400" aria-hidden="true">
+      <g class="spin"><circle class="s-line" cx="200" cy="200" r="170"/><circle class="s-gold" cx="200" cy="200" r="170" stroke-dasharray="4 18"/></g>
+      <g class="s-dim"><path d="M200 70 310 133.5v127L200 324 90 260.5v-127z"/><path d="M200 70v254M90 133.5l110 63.5 110-63.5"/>
+        <path class="s-faint" d="M145 101.75l110 63.5M255 101.75l-110 63.5M90 197l110 63.5 110-63.5M145 292.25V165.25M255 292.25V165.25"/></g>
+      <g class="f-gold"><circle cx="200" cy="197" r="3"/><circle cx="310" cy="133.5" r="2.5"/><circle cx="90" cy="260.5" r="2.5"/><circle cx="200" cy="70" r="2.5"/></g>
+    </svg>
+    <div class="label mono">Tesis doctoral · 2026 — 2030</div>
+    <h1>Gemelos digitales<br>de patrimonio <span class="gold">cultural</span></h1>
+    <p class="lead">Un flujo de trabajo validable y replicable, pensado para que personas no expertas puedan digitalizar patrimonio con la fiabilidad que exigen restauradores y especialistas.</p>
+    <div class="actions">
+      <a class="btn cut" href="{{ '/bitacora/' | relative_url }}">Ver avances →</a>
+      <a class="btn ghost cut" href="#lineas">Explorar ↓</a>
     </div>
-    <div class="hero-visual" aria-hidden="true">
-      <span class="hud tl">SCAN_ID 0001</span><span class="hud tr">LOD 0—4</span>
-      <span class="hud bl">MESH · TEX · VAL</span><span class="hud br">● DIGITAL TWIN</span>
-      <svg viewBox="0 0 400 400" fill="none">
-        <g class="spin"><circle class="s-line" cx="200" cy="200" r="150"/><circle class="s-gold" cx="200" cy="200" r="150" stroke-dasharray="4 18"/></g>
-        <g class="s-dim"><path d="M200 90 295 145v110l-95 55-95-55V145z"/><path d="M200 90v220M105 145l95 55 95-55"/>
-          <path d="M152 117.5l95 55M247 117.5l-95 55M105 200l95 55 95-55M152 282.5V172.5M247 282.5V172.5" class="s-faint"/></g>
-        <g class="f-gold"><circle cx="200" cy="200" r="3"/><circle cx="295" cy="145" r="2.5"/><circle cx="105" cy="255" r="2.5"/><circle cx="200" cy="90" r="2.5"/></g>
-      </svg>
+    <div class="stats">
+      <div><b>3</b><span class="mono">Líneas</span></div>
+      <div><b>2030</b><span class="mono">Defensa prevista</span></div>
+      <div><b>{{ site.posts.size | prepend: '0' | slice: -2, 2 }}</b><span class="mono">Entradas</span></div>
     </div>
   </div>
 </div>
 
 <section class="tight" id="lineas">
   <div class="wrap">
-    <div class="label mono">Líneas de investigación</div>
-    <h2>Tres frentes, un <a class="inline" href="#flujo">mismo flujo</a></h2>
+    <div class="head center">
+      <div class="label mono">Líneas de investigación</div>
+      <h2>Tres frentes, un <a class="inline" href="#flujo">mismo flujo</a></h2>
+    </div>
     <div class="grid3 lines">
-      <div class="card"><div class="num">A</div><span class="tag a">Caso práctico</span><h3>Digitalización de obra existente</h3><p>De la captura de una obra física a su gemelo digital en tiempo real, con distintos niveles de calidad y control de resolución.</p></div>
-      <div class="card"><div class="num">B</div><span class="tag">Proyecto de investigación</span><h3>Patrimonio perdido</h3><p>Reconstrucción digital de obras y espacios que ya no existen a partir de documentación y fuentes indirectas.</p></div>
-      <div class="card"><div class="num">C</div><span class="tag">Marco teórico</span><h3>Metodología y validación</h3><p>Estado del arte, criterios de calidad y validación del flujo con perfiles expertos en conservación.</p></div>
+      <div class="card cut gc"><div class="num">A</div><span class="tag a">Caso práctico</span><h3>Digitalización de obra existente</h3><p>De la captura de una obra física a su gemelo digital en tiempo real, con distintos niveles de calidad y control de resolución.</p></div>
+      <div class="card cut gc"><div class="num">B</div><span class="tag">Proyecto de investigación</span><h3>Patrimonio perdido</h3><p>Reconstrucción digital de obras y espacios que ya no existen a partir de documentación y fuentes indirectas.</p></div>
+      <div class="card cut gc"><div class="num">C</div><span class="tag">Marco teórico</span><h3>Metodología y validación</h3><p>Estado del arte, criterios de calidad y validación del flujo con perfiles expertos en conservación.</p></div>
     </div>
   </div>
 </section>
 
 <section class="tight" id="flujo">
   <div class="wrap">
-    <div class="label mono">Flujo de trabajo</div>
-    <h2>Del objeto físico al gemelo digital</h2>
-    <div class="pipe">
+    <div class="head center">
+      <div class="label mono">Flujo de trabajo</div>
+      <h2>Del objeto físico al gemelo digital</h2>
+    </div>
+    <div class="pipe cut">
       <div><span class="mono gold">01</span><h3>Captura</h3><p>Fotogrametría y escaneo documentados.</p></div>
       <div><span class="mono gold">02</span><h3>Procesado</h3><p>Reconstrucción de malla y textura.</p></div>
-      <div><span class="mono gold">03</span><h3>Optimización</h3><p>Niveles de detalle y técnicas de producción de videojuegos.</p></div>
+      <div><span class="mono gold">03</span><h3>Optimización</h3><p>Niveles de detalle y técnicas de videojuegos.</p></div>
       <div><span class="mono gold">04</span><h3>Validación</h3><p>Métricas objetivas y revisión experta.</p></div>
       <div><span class="mono gold">05</span><h3>Gemelo</h3><p>Visualización en tiempo real.</p></div>
     </div>
@@ -58,14 +57,15 @@ nav: inicio
 </section>
 
 <section class="tight">
-  <div class="wrap">
-    <div class="row-head">
-      <div><div class="label mono">Últimos avances</div><h2>Bitácora reciente</h2></div>
-      <a class="btn ghost" href="{{ '/bitacora/' | relative_url }}">Todo el archivo →</a>
+  <div class="wrap narrow">
+    <div class="head center">
+      <div class="label mono">Últimos avances</div>
+      <h2>Bitácora reciente</h2>
     </div>
     <div class="list">
       {% for p in site.posts limit:3 %}{% include post-row.html %}{% endfor %}
       {% if site.posts.size == 0 %}<p class="empty mono">// Primera entrada en preparación</p>{% endif %}
     </div>
+    <div class="center" style="margin-top:32px"><a class="btn ghost cut" href="{{ '/bitacora/' | relative_url }}">Todo el archivo →</a></div>
   </div>
 </section>

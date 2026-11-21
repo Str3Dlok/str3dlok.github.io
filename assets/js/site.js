@@ -22,17 +22,20 @@
   var fino = window.matchMedia('(pointer:fine)').matches;
   var calma = window.matchMedia('(prefers-reduced-motion:reduce)').matches;
   if (fino && !calma) {
-    var raf = 0, x = -999, y = -999;
+    // El halo sigue al cursor con un pequeño retardo (interpolación) para que se sienta fluido
+    var tx = innerWidth / 2, ty = innerHeight * 0.3, cx = tx, cy = ty, corriendo = false;
+    function paso() {
+      cx += (tx - cx) * 0.12; cy += (ty - cy) * 0.12;
+      root.style.setProperty('--mx', cx.toFixed(1) + 'px');
+      root.style.setProperty('--my', cy.toFixed(1) + 'px');
+      if (Math.abs(tx - cx) + Math.abs(ty - cy) > 0.5) requestAnimationFrame(paso); else corriendo = false;
+    }
     document.addEventListener('pointermove', function (e) {
-      x = e.clientX; y = e.clientY;
-      if (!raf) raf = requestAnimationFrame(function () {
-        root.style.setProperty('--mx', x + 'px');
-        root.style.setProperty('--my', y + 'px');
-        raf = 0;
-      });
+      tx = e.clientX; ty = e.clientY;
+      if (!corriendo) { corriendo = true; requestAnimationFrame(paso); }
     }, { passive: true });
     document.body.classList.add('spot');
-    document.addEventListener('pointerleave', function () { root.style.setProperty('--mx', '-999px'); });
+    paso();
   }
 
   /* ---- Botón flotante: abajo cuando estás arriba, arriba cuando has bajado ---- */

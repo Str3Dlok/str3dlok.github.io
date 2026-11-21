@@ -7,35 +7,33 @@ layout: default
       <a href="{{ '/' | relative_url }}">Inicio</a><span>/</span><a href="{{ '/bitacora/' | relative_url }}">Bitácora</a><span>/</span><em>{{ page.title }}</em>
     </nav>
 
-    {% if page.image %}<figure class="post-hero"><img src="{{ page.image | relative_url }}" alt=""></figure>{% endif %}
+    {% if page.image %}<figure class="post-hero cut gc"><img src="{{ page.image | relative_url }}" alt=""></figure>{% endif %}
 
-    <div class="post-grid">
-      <article class="article">
+    <article class="article">
+      <div class="post-head center">
         <h1 class="post-title">{{ page.title }}</h1>
+        <div class="post-meta mono"><time datetime="{{ page.date | date: '%Y-%m-%d' }}">{{ page.date | date: '%d/%m/%Y' }}</time><span>·</span><span>{{ page.author }}</span></div>
         <span class="sep wide"></span>
         <p class="resumen">{{ page.resumen | default: page.description }}</p>
+      </div>
 
-        <div class="post-body">{{ content }}</div>
+      <div class="post-body">{{ content }}</div>
 
-        {% if page.sketchfab %}
-        <div class="embed"><iframe title="Modelo 3D" src="https://sketchfab.com/models/{{ page.sketchfab }}/embed?ui_theme=dark" allow="autoplay; fullscreen; xr-spatial-tracking" loading="lazy"></iframe></div>
-        {% endif %}
-        {% if page.youtube %}<a class="btn ghost" href="{{ page.youtube }}" target="_blank" rel="noopener">▶ Ver vídeo en YouTube ↗</a>{% endif %}
-        {% if page.ia %}<div class="note">Declaración: {{ page.ia }}</div>{% endif %}
-      </article>
+      {% if page.sketchfab %}
+      <div class="embed cut"><iframe title="Modelo 3D" src="https://sketchfab.com/models/{{ page.sketchfab }}/embed?ui_theme=dark" allow="autoplay; fullscreen; xr-spatial-tracking" loading="lazy"></iframe></div>
+      {% endif %}
+      {% if page.youtube %}<div class="center"><a class="btn ghost cut" href="{{ page.youtube }}" target="_blank" rel="noopener">▶ Ver vídeo en YouTube ↗</a></div>{% endif %}
+      {% if page.ia %}<div class="note">Declaración: {{ page.ia }}</div>{% endif %}
 
-      <aside class="post-side">
-        <div class="side-block"><span class="mono">Publicado</span><b>{{ page.date | date: '%d/%m/%Y' }}</b></div>
-        <div class="side-block"><span class="mono">Autor</span><b>{{ page.author }}</b></div>
-        <div class="side-block"><span class="mono">Hashtags</span>
-          <div class="tags">{% for t in page.tags %}<a class="tag" href="{{ '/bitacora/' | relative_url }}?tag={{ t }}">#{{ t }}</a>{% endfor %}</div>
-        </div>
-      </aside>
-    </div>
+      <div class="post-tags center">
+        <span class="mono">Hashtags</span>
+        <div class="tags">{% for t in page.tags %}<a class="tag" href="{{ '/bitacora/' | relative_url }}?tag={{ t }}">#{{ t }}</a>{% endfor %}</div>
+      </div>
+    </article>
 
     <nav class="pn" aria-label="Entradas">
-      {% if page.previous %}<a class="pn-prev" href="{{ page.previous.url | relative_url }}" data-key="prev"><span class="mono">← Anterior</span><b>{{ page.previous.title }}</b></a>{% else %}<span></span>{% endif %}
-      {% if page.next %}<a class="pn-next" href="{{ page.next.url | relative_url }}" data-key="next"><span class="mono">Siguiente →</span><b>{{ page.next.title }}</b></a>{% endif %}
+      {% if page.previous %}<a class="pn-prev cut" href="{{ page.previous.url | relative_url }}" data-key="prev"><span class="mono">← Anterior</span><b>{{ page.previous.title }}</b></a>{% else %}<span></span>{% endif %}
+      {% if page.next %}<a class="pn-next cut" href="{{ page.next.url | relative_url }}" data-key="next"><span class="mono">Siguiente →</span><b>{{ page.next.title }}</b></a>{% endif %}
     </nav>
   </div>
 </section>

@@ -6,13 +6,15 @@ permalink: /bitacora/
 script: /assets/js/bitacora.js
 ---
 <section>
-  <div class="wrap">
-    <div class="label mono">Archivo de avances</div>
-    <h1 class="page-title">Bitácora</h1>
-    <p class="lead">Diario abierto de la investigación: qué se está explorando, qué se va descubriendo y qué conviene tener en cuenta.</p>
+  <div class="wrap narrow">
+    <div class="head center">
+      <div class="label mono">Archivo de avances</div>
+      <h1 class="page-title">Bitácora</h1>
+      <p class="lead">Diario abierto de la investigación: qué se está explorando, qué se va descubriendo y qué conviene tener en cuenta.</p>
+    </div>
     <div class="filters" id="filters">
-      <button class="on" data-f="Todas">Todas</button>
-      {% assign etiquetas = site.tags | sort %}{% for t in etiquetas %}<button data-f="{{ t[0] }}">#{{ t[0] }}</button>{% endfor %}
+      <button class="cut on" data-f="Todas">Todas</button>
+      {% assign etiquetas = site.tags | sort %}{% for t in etiquetas %}<button class="cut" data-f="{{ t[0] }}">#{{ t[0] }}</button>{% endfor %}
     </div>
     <div class="list" id="list">
       {% for p in site.posts %}{% include post-row.html %}{% endfor %}
