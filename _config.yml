@@ -30,10 +30,9 @@ social:
     - https://www.linkedin.com/in/alejandro-baeza-fernandez-str3dlok/
     - https://www.instagram.com/str3dlok
     - https://x.com/str3dlok
-# Verificación en buscadores (rellenar cuando se den de alta):
-# webmaster_verifications:
-#   google: CODIGO_SEARCH_CONSOLE
-#   bing: CODIGO_BING
+# Verificación en buscadores
+webmaster_verifications:
+  google: c5AH2lvs5d-EG_t9KSK8-isewRpAMYWAOZnYVI-Ov6Y
 
 # Enlaces de las entradas: /bitacora/AAAA/MM/DD/titulo/
 permalink: /bitacora/:year/:month/:day/:title/
