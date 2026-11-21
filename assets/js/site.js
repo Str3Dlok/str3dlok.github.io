@@ -17,16 +17,16 @@
   pintarTema();
 
   /* ================= Fondo de píxeles =================
-     Un canvas diminuto (1 píxel = 1 celda de 5 px) que el navegador amplía con "image-rendering: pixelated".
+     Un canvas diminuto (1 píxel = 1 celda de 6 px) que el navegador amplía con "image-rendering: pixelated".
      Solo se redibuja cuando hay algo que mostrar: halo del cursor y su estela, onda al clic o algún píxel de ambiente. */
-  var CEL = 5, cv = document.querySelector('.fx-pix'), cx2 = cv && cv.getContext('2d', { alpha: true });
+  var CEL = 6, cv = document.querySelector('.fx-pix'), cx2 = cv && cv.getContext('2d', { alpha: true });
   var cols = 0, filas = 0, oro = '#c9a44c';
   var mx = -99, my = -99, tx = -99, ty = -99, ondas = [], chispas = [], pendiente = false, ultimo = 0;
   var estela = [], VIDA = 650; // puntos recientes del cursor (la "cola") y su duración en ms
   // Matriz de Bayer 4x4: tramado retro para que el halo se vea "pixelado" y no como un degradado liso
   var BAYER = [0, 8, 2, 10, 12, 4, 14, 6, 3, 11, 1, 9, 15, 7, 13, 5];
   // Tabla del halo (dx, dy, intensidad) calculada una sola vez: evita raíces cuadradas en cada fotograma
-  var HALO = [], RH = 29;
+  var HALO = [], RH = 24;
   for (var hy = -RH; hy <= RH; hy++) for (var hx = -RH; hx <= RH; hx++) {
     var hd = Math.sqrt(hx * hx + hy * hy); if (hd <= RH) { var hk = 1 - hd / RH; HALO.push(hx, hy, hk * hk); }
   }
@@ -58,18 +58,20 @@
     // 1b) Estela: la cola del cursor se desvanece hasta cero, como una serpiente de píxeles
     if (tx > -50) {
       var ult = estela[estela.length - 1];
-      if (!ult || Math.abs(ult.x - mx) + Math.abs(ult.y - my) > 3) estela.push({ x: mx, y: my, t: t });
+      if (!ult || Math.abs(ult.x - tx) + Math.abs(ult.y - ty) > 3) estela.push({ x: tx, y: ty, t: t });
     }
     while (estela.length && t - estela[0].t > VIDA) estela.shift();
     if (estela.length > 1) {
       vivo = rapido = true; cx2.fillStyle = oro;
       for (var e = 1; e < estela.length; e++) {
         var A = estela[e - 1], B = estela[e], vida = 1 - (t - B.t) / VIDA;
-        var pasos = Math.max(1, Math.hypot(B.x - A.x, B.y - A.y) / CEL | 0);
+        // Una celda por paso en el eje más largo: la línea queda continua aunque el ratón vaya muy rápido
+        var ax = A.x / CEL, ay = A.y / CEL, ddx = B.x / CEL - ax, ddy = B.y / CEL - ay;
+        var pasos = Math.max(1, Math.ceil(Math.max(Math.abs(ddx), Math.abs(ddy))));
+        var g = vida > .55 ? 2 : 1; // tramo reciente algo más grueso, la cola se afina
         cx2.globalAlpha = vida * vida * .6;
         for (var s = 0; s <= pasos; s++) {
-          var px = (A.x + (B.x - A.x) * s / pasos) / CEL | 0, py = (A.y + (B.y - A.y) * s / pasos) / CEL | 0;
-          cx2.fillRect(px, py, 1, 1);
+          cx2.fillRect((ax + ddx * s / pasos | 0) - (g >> 1), (ay + ddy * s / pasos | 0) - (g >> 1), g, g);
         }
       }
     }
@@ -77,7 +79,7 @@
     for (var i = ondas.length - 1; i >= 0; i--) {
       var o = ondas[i], p = (t - o.t0) / 700;
       if (p >= 1) { ondas.splice(i, 1); continue; }
-      vivo = rapido = true; var r = 6 + p * 45, a = 1 - p;
+      vivo = rapido = true; var r = 5 + p * 38, a = 1 - p;
       cx2.fillStyle = oro;
       for (var ang = 0; ang < 6.283; ang += 1.2 / r) {
         cx2.globalAlpha = a * .8; cx2.fillRect(Math.round(o.x + Math.cos(ang) * r), Math.round(o.y + Math.sin(ang) * r), 1, 1);
