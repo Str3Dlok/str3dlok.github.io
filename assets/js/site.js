@@ -17,11 +17,12 @@
   pintarTema();
 
   /* ================= Fondo de píxeles y glitch =================
-     Un canvas diminuto (1 píxel = 1 celda de 16 px) que el navegador amplía con "image-rendering: pixelated".
-     Solo se redibuja cuando hay algo que mostrar: halo del cursor, onda al clic, píxeles que parpadean o un glitch. */
-  var CEL = 16, cv = document.querySelector('.fx-pix'), cx2 = cv && cv.getContext('2d', { alpha: true });
+     Un canvas diminuto (1 píxel = 1 celda de 8 px) que el navegador amplía con "image-rendering: pixelated".
+     Solo se redibuja cuando hay algo que mostrar: halo del cursor y su estela, onda al clic, píxeles que parpadean o un glitch. */
+  var CEL = 8, cv = document.querySelector('.fx-pix'), cx2 = cv && cv.getContext('2d', { alpha: true });
   var cols = 0, filas = 0, oro = '#c9a44c', txt = '#ecedef';
   var mx = -99, my = -99, tx = -99, ty = -99, ondas = [], chispas = [], glitch = null, pendiente = false, ultimo = 0;
+  var estela = [], VIDA = 650; // puntos recientes del cursor (la "cola") y su duración en ms
   // Matriz de Bayer 4x4: tramado retro para que el halo se vea "pixelado" y no como un degradado liso
   var BAYER = [0, 8, 2, 10, 12, 4, 14, 6, 3, 11, 1, 9, 15, 7, 13, 5];
   function leerColores() {
@@ -42,7 +43,7 @@
     if (tx > -50) {
       mx += (tx - mx) * 0.22; my += (ty - my) * 0.22;
       if (Math.abs(tx - mx) + Math.abs(ty - my) > 0.05) vivo = rapido = true;
-      var R = 9, R2 = R * R, ccx = mx / CEL, ccy = my / CEL;
+      var R = 18, R2 = R * R, ccx = mx / CEL, ccy = my / CEL;
       cx2.fillStyle = oro;
       for (var y = Math.max(0, ccy - R | 0); y <= Math.min(filas - 1, ccy + R | 0); y++) {
         for (var x = Math.max(0, ccx - R | 0); x <= Math.min(cols - 1, ccx + R | 0); x++) {
@@ -53,11 +54,29 @@
         }
       }
     }
+    // 1b) Estela: la cola del cursor se desvanece hasta cero, como una serpiente de píxeles
+    if (tx > -50) {
+      var ult = estela[estela.length - 1];
+      if (!ult || Math.abs(ult.x - mx) + Math.abs(ult.y - my) > 3) estela.push({ x: mx, y: my, t: t });
+    }
+    while (estela.length && t - estela[0].t > VIDA) estela.shift();
+    if (estela.length > 1) {
+      vivo = rapido = true; cx2.fillStyle = oro;
+      for (var e = 1; e < estela.length; e++) {
+        var A = estela[e - 1], B = estela[e], vida = 1 - (t - B.t) / VIDA;
+        var pasos = Math.max(1, Math.hypot(B.x - A.x, B.y - A.y) / CEL | 0), grosor = 1 + vida * 2 | 0;
+        cx2.globalAlpha = vida * vida * .55;
+        for (var s = 0; s <= pasos; s++) {
+          var px = (A.x + (B.x - A.x) * s / pasos) / CEL | 0, py = (A.y + (B.y - A.y) * s / pasos) / CEL | 0;
+          cx2.fillRect(px - (grosor >> 1), py - (grosor >> 1), grosor, grosor);
+        }
+      }
+    }
     // 2) Ondas de píxeles al hacer clic / tocar
     for (var i = ondas.length - 1; i >= 0; i--) {
       var o = ondas[i], p = (t - o.t0) / 700;
       if (p >= 1) { ondas.splice(i, 1); continue; }
-      vivo = rapido = true; var r = 2 + p * 14, a = 1 - p;
+      vivo = rapido = true; var r = 4 + p * 28, a = 1 - p;
       cx2.fillStyle = oro;
       for (var ang = 0; ang < 6.283; ang += 1.2 / r) {
         cx2.globalAlpha = a * .8; cx2.fillRect(Math.round(o.x + Math.cos(ang) * r), Math.round(o.y + Math.sin(ang) * r), 1, 1);
@@ -76,7 +95,7 @@
       else {
         vivo = rapido = true;
         glitch.franjas.forEach(function (f) {
-          var off = (Math.random() * 6 - 3) | 0;
+          var off = (Math.random() * 12 - 6) | 0;
           cx2.globalAlpha = .18; cx2.fillStyle = oro; cx2.fillRect(f.x + off, f.y, f.w, f.h);
           cx2.globalAlpha = .12; cx2.fillStyle = txt; cx2.fillRect(f.x - off + 1, f.y, f.w, 1);
         });
@@ -100,11 +119,11 @@
     // Ambiente: chispas y glitch esporádicos, en pausa si la pestaña no está visible
     setInterval(function () {
       if (document.hidden) return;
-      var n = 2 + Math.random() * 3 | 0, ahora = performance.now();
+      var n = 3 + Math.random() * 4 | 0, ahora = performance.now();
       for (var j = 0; j < n; j++) chispas.push({ x: Math.random() * cols | 0, y: Math.random() * filas | 0, t0: ahora + Math.random() * 600, dur: 700 + Math.random() * 900, oro: Math.random() < .5 });
       if (!glitch && Math.random() < .14) {
         var fr = [], m = 1 + Math.random() * 3 | 0, y0 = Math.random() * filas | 0;
-        for (var k = 0; k < m; k++) fr.push({ x: Math.random() * cols * .5 | 0, y: y0 + k * (1 + Math.random() * 2 | 0), w: 6 + Math.random() * cols * .4 | 0, h: 1 });
+        for (var k = 0; k < m; k++) fr.push({ x: Math.random() * cols * .5 | 0, y: y0 + k * (1 + Math.random() * 3 | 0), w: 12 + Math.random() * cols * .4 | 0, h: 1 + Math.random() * 2 | 0 });
         glitch = { t0: ahora, dur: 140 + Math.random() * 160, franjas: fr };
       }
       pedir();

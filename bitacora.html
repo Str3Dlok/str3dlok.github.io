@@ -16,21 +16,21 @@ script: /assets/js/bitacora.js
 
     <!-- Buscador y filtros (se combinan entre sí) -->
     <div class="finder" role="search">
-      <label class="search cut" for="q">
-        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.6-3.6"/></svg>
-        <input id="q" type="search" placeholder="Buscar por palabra clave o #hashtag" autocomplete="off" aria-label="Buscar en la bitácora">
-      </label>
-      <div class="finder-row">
-        <label class="field cut"><span class="mono">Desde</span><select id="desde" aria-label="Fecha desde"><option value="">El inicio</option></select></label>
-        <label class="field cut"><span class="mono">Hasta</span><select id="hasta" aria-label="Fecha hasta"><option value="">Hoy</option></select></label>
-        <label class="field cut"><span class="mono">Orden</span><select id="orden" aria-label="Orden"><option value="desc">Más recientes</option><option value="asc">Más antiguas</option></select></label>
+      <div class="finder-bar">
+        <label class="search cut" for="q">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.6-3.6"/></svg>
+          <input id="q" type="search" placeholder="Buscar o #hashtag" autocomplete="off" aria-label="Buscar en la bitácora">
+        </label>
+        <label class="field cut"><select id="desde" aria-label="Fecha desde"><option value="">Desde</option></select></label>
+        <label class="field cut"><select id="hasta" aria-label="Fecha hasta"><option value="">Hasta</option></select></label>
+        <label class="field cut"><select id="orden" aria-label="Orden"><option value="desc">Recientes</option><option value="asc">Antiguas</option></select></label>
       </div>
       <div class="filters" id="filters" aria-label="Hashtags (puedes elegir varios)">
         {% assign etiquetas = site.tags | sort %}{% for t in etiquetas %}<button class="cut" type="button" data-f="{{ t[0] }}" aria-pressed="false">#{{ t[0] }}<span class="n">{{ t[1].size }}</span></button>{% endfor %}
       </div>
       <div class="finder-status">
         <span class="mono" id="cuenta" aria-live="polite"></span>
-        <button class="clear mono" id="limpiar" type="button" hidden>Limpiar filtros ×</button>
+        <button class="clear mono" id="limpiar" type="button" hidden>Limpiar ×</button>
       </div>
     </div>
 

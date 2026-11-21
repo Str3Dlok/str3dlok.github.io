@@ -18,5 +18,6 @@ tags: [diario, metodologia]               # hashtags cortos, minúsculas, sin ti
 
 ## A tener en cuenta
 
-<!-- Confidencialidad: sin resultados concretos, tablas, parámetros, herramientas propias,
+<!-- Tono: cercano y con toques de humor (es un diario, no un paper).
+     Confidencialidad: sin resultados concretos, tablas, parámetros, herramientas propias,
      ni nombres de personas, entidades, obras o colaboradores. -->

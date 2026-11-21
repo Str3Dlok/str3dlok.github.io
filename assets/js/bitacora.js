@@ -20,7 +20,7 @@
   // Meses disponibles (a partir de las entradas) para los selectores de fecha
   var meses = posts.map(function (p) { return p.dataset.date; })
     .filter(function (m, i, a) { return m && a.indexOf(m) === i; }).sort();
-  var fmt = new Intl.DateTimeFormat('es-ES', { month: 'long', year: 'numeric' });
+  var fmt = new Intl.DateTimeFormat('es-ES', { month: 'short', year: 'numeric' });
   meses.forEach(function (m) {
     var etiqueta = fmt.format(new Date(m + '-15'));
     etiqueta = etiqueta.charAt(0).toUpperCase() + etiqueta.slice(1);
