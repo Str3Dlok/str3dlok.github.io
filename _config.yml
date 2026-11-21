@@ -59,4 +59,5 @@ plugins:
 
 exclude:
   - README.md
+  - SECURITY.md
   - _plantillas

@@ -1,0 +1,7 @@
+# Dependabot: revisa semanalmente las acciones de GitHub que se añadan al repositorio
+version: 2
+updates:
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
