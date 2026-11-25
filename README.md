@@ -3,11 +3,13 @@
 Web y bitácora de la investigación doctoral de Alejandro Baeza (Str3Dlok). Está hecha con Jekyll y la publica GitHub Pages.
 
 ## Estructura
-- `index.html`: página de inicio.
+- `index.html`: página de inicio. Sus textos están en `_data/inicio.yml`.
 - `bitacora.html`: archivo de entradas con filtro por hashtag (se generan solos a partir de las entradas). Admite `?tag=nombre`.
-- `contacto.html`: perfil y redes.
+- `contacto.html`: perfil y redes. Sus textos están en `_data/perfil.yml`.
+- `_data/`: textos editables. `inicio.yml`, `perfil.yml` y `sitio.yml` (menú y pie).
 - `_posts/`: una entrada por archivo, con el nombre `AAAA-MM-DD-titulo.md`.
-- `_plantillas/entrada.md`: plantilla con todos los campos de una entrada (no se publica).
+- `_plantillas/entrada.md`: plantilla con todos los campos de una entrada para quien escriba a mano (no se publica).
+- `_includes/`: piezas reutilizables. `md-linea.html` (Markdown en línea para títulos), `url.html` (enlaces escritos en el gestor), `icono-red.html` (iconos de redes).
 - `assets/`: estilos, scripts (`site.js` común, `bitacora.js` filtro) e imágenes. Las imágenes de las entradas van en `assets/img/posts/`.
 
 ## Modo desarrollo (ver la web en local)
