@@ -46,6 +46,10 @@ defaults:
     values:
       layout: post
       author: "Alejandro Baeza"
+  # Gestor de contenidos: fuera del mapa del sitio
+  - scope: { path: "admin" }
+    values:
+      sitemap: false
 
 feed:
   path: feed.xml
