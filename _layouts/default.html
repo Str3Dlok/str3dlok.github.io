@@ -6,7 +6,8 @@
 <meta name="theme-color" content="#0a0b0d">
 <script>try{var t=localStorage.getItem('tema');if(t=='plano')t='neon';if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
 {% seo %}
-<meta name="robots" content="{{ page.robots | default: 'index, follow, max-image-preview:large, max-snippet:-1' }}">
+{%- comment -%} site.noindex lo activa el despliegue de prueba (copias del repositorio), para no duplicar la web en buscadores {%- endcomment %}
+<meta name="robots" content="{% if site.noindex %}noindex, nofollow{% else %}{{ page.robots | default: 'index, follow, max-image-preview:large, max-snippet:-1' }}{% endif %}">
 {% feed_meta %}
 <link rel="manifest" href="{{ '/site.webmanifest' | relative_url }}">
 <link rel="icon" href="{{ '/favicon.ico' | relative_url }}" sizes="any">

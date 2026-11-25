@@ -18,7 +18,7 @@ permalink: /contacto/
     {% include social.html %}
 
     <div class="bio">
-      {{ d.bio | markdownify }}
+      {% assign bio_html = d.bio | markdownify %}{% include rutas-base.html html=bio_html %}
     </div>
 
     <div class="grid3 facts cut">

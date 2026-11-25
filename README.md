@@ -13,6 +13,25 @@ Web y bitácora de la investigación doctoral de Alejandro Baeza (Str3Dlok). Est
 - `admin/`: gestor de contenidos (Sveltia CMS).
 - `assets/`: estilos, scripts (`site.js` común, `bitacora.js` filtro) e imágenes. Las imágenes de las entradas van en `assets/img/posts/`.
 
+## Despliegue
+`.github/workflows/pages.yml` construye la web y, si toca, la publica. Funciona igual en este repositorio y en cualquier copia (fork) de pruebas:
+
+- **En cada pull request** solo construye y comprueba los enlaces internos (`.github/comprobar-enlaces.rb`), sin publicar nada.
+- **En cada push a `main`** publica únicamente si en *Settings → Pages → Build and deployment → Source* está elegido **GitHub Actions**. Con «Deploy from a branch» solo comprueba que compila, y GitHub sigue publicando como siempre.
+- **La ruta base sale sola**: vacía en `str3dlok.github.io` y `/str3dlok.github.io` en `usuario.github.io/str3dlok.github.io/`. Por eso en las plantillas todas las rutas pasan por `relative_url`, y el HTML que viene de Markdown (entradas, biografía) pasa por `_includes/rutas-base.html`.
+- **En una copia** la web lleva `noindex` (para no duplicarla en buscadores), y su `/admin/` apunta a la propia copia, no a este repositorio.
+
+Para probar cambios en una copia propia:
+1. En la copia, pestaña *Actions*: activar los workflows (en los forks vienen desactivados).
+2. *Settings → Pages → Source*: **GitHub Actions**.
+3. Subir los cambios a `main` de la copia. La web queda en `https://usuario.github.io/str3dlok.github.io/`.
+
+Comprobar los enlaces en local como si la web estuviera en una subcarpeta:
+```bash
+bundle exec jekyll build --baseurl /str3dlok.github.io
+ruby .github/comprobar-enlaces.rb _site /str3dlok.github.io
+```
+
 ## Gestor de contenidos (Sveltia CMS)
 En <https://str3dlok.github.io/admin/> se editan las entradas de la bitácora y los textos de las páginas sin tocar código. Cada vez que se guarda, el gestor hace un commit en GitHub y GitHub Pages publica el cambio en uno o dos minutos.
 

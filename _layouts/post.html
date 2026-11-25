@@ -17,7 +17,7 @@ layout: default
         <p class="resumen">{{ page.resumen | default: page.description }}</p>
       </div>
 
-      <div class="post-body">{{ content }}</div>
+      <div class="post-body">{% include rutas-base.html html=content %}</div>
 
       {% if page.sketchfab and page.sketchfab != '' %}
       <div class="embed cut"><iframe title="Modelo 3D" src="https://sketchfab.com/models/{{ page.sketchfab }}/embed?ui_theme=dark" allow="autoplay; fullscreen; xr-spatial-tracking" loading="lazy"></iframe></div>
